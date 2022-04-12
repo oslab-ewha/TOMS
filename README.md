@@ -1,7 +1,7 @@
-# COVS (Cloud Offloading & Voltage Scaling)
-Cloud Offloading &amp; Voltage Scaling
+# ECVS (Edge Computing & Voltage Scaling)
+Edge Computing &amp; Voltage Scaling
 
-This project demonstrates that a GA(genetic algorithm) approach can provide power-efficient scheduling for real-time tasks that makes use of DVS(dynamic voltage scaling) and Cloud offloading. 
+This project demonstrates that a GA(genetic algorithm) approach can provide power-efficient scheduling for real-time tasks that makes use of DVS(dynamic voltage scaling) and edge computing. 
 
 Two executagles included in this project.
 - gasgen: task generation tool based on CPU and total utilization
