@@ -26,8 +26,8 @@ get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud
 	double	wcet_scaled;
 	double	transtime; // gyuri
 	double  netcomtime; // jennifer
-	// wcet_scaled = task->wcet * wcet_scaled_cpu * wcet_scaled_mem;
-	wcet_scaled = task->wcet * wcet_scaled_cpu; // jennifer
+	wcet_scaled = task->wcet * wcet_scaled_cpu * wcet_scaled_mem; // ADDMEM
+	// wcet_scaled = task->wcet * wcet_scaled_cpu; // jennifer
 	
 	if (wcet_scaled >= task->period)
 		FATAL(3, "task[%u]: scaled wcet exceeds task period: %lf > %u", task->no, wcet_scaled, task->period);

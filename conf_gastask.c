@@ -140,9 +140,6 @@ parse_cloud(FILE *fp)
 		if(max_capacity == 0){
 			FATAL(2, "invalid max memory capacity: %s", trim(buf));
 		}
-		// if (wcet_scale < 0 || wcet_scale > 1) {
-		// 	FATAL(2, "invalid memory wcet scale: %s", trim(buf));
-		// }
 		if (power_active < 0 || power_idle < 0) {
 			FATAL(2, "invalid memory power: %s", trim(buf));
 		}
