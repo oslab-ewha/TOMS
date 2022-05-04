@@ -67,6 +67,7 @@ assign_taskattrs(taskattrs_t *taskattrs, unsigned max_value)
 	setup_taskattrs(taskattrs);
 }
 
+//gyuri
 static void
 assign_taskattrs_offloading_bool(taskattrs_t *taskattrs, unsigned max_value)
 {
@@ -74,7 +75,7 @@ assign_taskattrs_offloading_bool(taskattrs_t *taskattrs, unsigned max_value)
 	for (int i = 0; i < offloading_max; i++)
 	{
 		offloading_rand[i] = abs(rand()) % n_pops;
-		for (int j = 0; j <= i; j++)
+		for (int j = 0; j < i; j++)
 		{
 			if (offloading_rand[j] == offloading_rand[i])
 			{
@@ -82,14 +83,14 @@ assign_taskattrs_offloading_bool(taskattrs_t *taskattrs, unsigned max_value)
 				break;
 			}
 		}
-		// offloading_bool = 0이면 무조건 local에서 처리해야하는 테스크
-		// offloading rand에 값이 있으면 로컬에서 처리해야하는 값.
-		for (int i = 0; i < offloading_max; i++)
-		{
-			taskattrs->attrs[offloading_rand[i]] = 1;
-		}
-		setup_taskattrs(taskattrs);
 	}
+		// offloading_bool = 1이면 무조건 local에서 처리해야하는 테스크
+		// offloading rand에 값이 있으면 로컬에서 처리해야하는 값.
+	for (int i = 0; i < offloading_max; i++)
+	{
+		taskattrs->attrs[offloading_rand[i]] = 1;
+	}
+	setup_taskattrs(taskattrs);
 }
 
 static void
@@ -285,7 +286,7 @@ BOOL check_utilpower(gene_t *gene)
 	{
 		double task_util, task_power_cpu, task_power_mem, task_power_net_com, task_deadline;
 
-		get_task_utilpower(i, gene->taskattrs_mem.attrs[i], gene->taskattrs_cloud.attrs[i], gene->taskattrs_cpufreq.attrs[i], gene->taskattrs_offloadingratio.attrs[i],
+		get_task_utilpower(i, gene->taskattrs_mem.attrs[i], gene->taskattrs_cloud.attrs[i], gene->taskattrs_cpufreq.attrs[i], gene->taskattrs_offloadingratio.attrs[i], gene->taskattrs_offloading_bool.attrs[i] ,
 						   &task_util, &task_power_cpu, &task_power_mem, &task_power_net_com, &task_deadline); // gyuri
 		util_new += task_util;
 		power_new_sum_cpu += task_power_cpu;
@@ -340,8 +341,9 @@ init_gene(gene_t *gene)
 	assign_taskattrs(&gene->taskattrs_mem, n_mems);
 	assign_taskattrs(&gene->taskattrs_cpufreq, n_cpufreqs);
 	assign_taskattrs(&gene->taskattrs_cloud, n_clouds);
-	(&gene->taskattrs_offloading_bool, 2);						// jennifer
-	assign_taskattrs_offloading(&gene->taskattrs_offloadingratio, n_offloadingratios, &gene->taskattrs_offloading_bool); // jennifer
+	assign_taskattrs_offloading_bool(&gene->taskattrs_offloading_bool, 2);						// jennifer
+	assign_taskattrs(&gene->taskattrs_offloadingratio, n_offloadingratios);
+	//assign_taskattrs_offloading(&gene->taskattrs_offloadingratio, n_offloadingratios, &gene->taskattrs_offloading_bool); // jennifer
 
 	for (i = 0; i < MAX_TRY; i++)
 	{

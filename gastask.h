@@ -102,7 +102,7 @@ void add_cloud(const char *typestr, double computation_power, double power_activ
 void add_network(unsigned uplink, unsigned downlink); // jennifer
 void add_net_commander(unsigned intercept_out, unsigned intercept_in); // jennifer
 
-void get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud_type, unsigned char cpufreq_type, unsigned char offloadingratio, double *putil, double *ppower_cpu, double *ppower_mem, double *ppower_net_com, double *pdeadline); //gyuri
+void get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud_type, unsigned char cpufreq_type, unsigned char offloadingratio, unsigned char offloadingbool, double *putil, double *ppower_cpu, double *ppower_mem, double *ppower_net_com, double *pdeadline); //gyuri
 unsigned get_task_memreq(unsigned no_task);
 
 void init_report(void);

@@ -10,7 +10,7 @@ unsigned	n_net_commanders; // jennifer
 net_commander_t  net_commanders[MAX_NETCOMMANDERS]; // jennifer
 
 void
-get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud_type, unsigned char cpufreq_type, unsigned char offloadingratio, double *putil, double *ppower_cpu, double *ppower_mem, double *ppower_net_com, double *pdeadline)
+get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud_type, unsigned char cpufreq_type, unsigned char offloadingratio, unsigned char offloadingbool, double *putil, double *ppower_cpu, double *ppower_mem, double *ppower_net_com, double *pdeadline)
 {
 	task_t	*task = tasks + no_task;
 	mem_t	*mem = mems + mem_type;
@@ -32,6 +32,8 @@ get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud
 	if (wcet_scaled >= task->period)
 		FATAL(3, "task[%u]: scaled wcet exceeds task period: %lf > %u", task->no, wcet_scaled, task->period);
 
+	if (offloadingbool == 1) //gyuri
+		offloadingratio = 0; //gyuri
 	transtime = task->input_size/(double)network->uplink + task->output_size/(double)network->downlink; // gyuri // jennifer
 	netcomtime = net_commander->intercept_out + net_commander->intercept_in;
 	*putil = (wcet_scaled  * (1.0 - offloadingratios[offloadingratio]) + (wcet_scaled_cpu * netcomtime) * offloadingratios[offloadingratio]) / task->period; // gyuri
