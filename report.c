@@ -81,8 +81,8 @@ save_task_infos(void)
 		FATAL(2, "over-utilized gene: %lf", gene->util);
 	}
 	for (i = 0; i < n_tasks; i++) {
-		fprintf(fp, "%u %u %u %u %u\n", (unsigned)gene->taskattrs_mem.attrs[i], (unsigned)gene->taskattrs_cpufreq.attrs[i],
-		(unsigned)gene->taskattrs_cloud.attrs[i], (unsigned)gene->taskattrs_offloadingratio.attrs[i], (unsigned)gene->taskattrs_offloading_bool.attrs[i]); // jennifer
+		fprintf(fp, "%u %u %u %u\n", (unsigned)gene->taskattrs_mem.attrs[i], (unsigned)gene->taskattrs_cpufreq.attrs[i],
+		(unsigned)gene->taskattrs_cloud.attrs[i], (unsigned)gene->taskattrs_offloadingratio.attrs[i]); // jennifer
 		if((unsigned)gene->taskattrs_offloadingratio.attrs[i] != 0)
 			n_offloading++;
 		if((unsigned)gene->taskattrs_cpufreq.attrs[i] == 0) // jennifer
