@@ -23,7 +23,6 @@ typedef struct {
 	taskattrs_t taskattrs_cloud; // jennifer
 	taskattrs_t	taskattrs_cpufreq;
 	taskattrs_t	taskattrs_offloadingratio; // jennifer
-	taskattrs_t taskattrs_offloading_bool;
 	double		util, power, score, power_idle, power_active, power_netcom; // jennifer
 	unsigned 	period_violation; // jennifer
 	struct list_head	list_util;
