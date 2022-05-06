@@ -22,7 +22,7 @@ get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud
 	double	wcet_scaled_mem = 1 / mem->wcet_scale;
 	double	wcet_scaled_cloud = 1 / cloud->computation_power; // jennifer
 	double	cpu_power_unit;
-	double  net_com_power_unit = 200; // jennifer
+	double  net_com_power_unit = 150; // jennifer
 	double	wcet_scaled;
 	double	transtime; // gyuri
 	double  netcomtime; // jennifer
