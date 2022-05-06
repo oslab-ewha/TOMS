@@ -3,6 +3,7 @@
 extern unsigned	wcet_min, wcet_max, mem_total;
 extern double	util_cpu, util_target;
 extern unsigned	n_tasks_target;
+extern unsigned task_size_min, task_size_max;
 extern unsigned	input_size_min, input_size_max; // jennifer
 extern unsigned	output_size_min, output_size_max; // jennifer
 extern unsigned n_networks_target; // jennifer
@@ -22,9 +23,9 @@ parse_gentask(FILE *fp)
 			fseek(fp, -1 * strlen(buf), SEEK_CUR);
 			return;
 		}
-		if (sscanf(buf, "%u %u %u %lf %lf %u %u %u %u %u", &wcet_min, &wcet_max, &mem_total,
-			   &util_cpu, &util_target, &n_tasks_target, 
-			   &input_size_min, &input_size_max, &output_size_min, &output_size_max) != 10) { // jennifer
+		if (sscanf(buf, "%u %u %u %lf %lf %u %u %u %u %u %u %u", &wcet_min, &wcet_max, &mem_total,
+			   &util_cpu, &util_target, &n_tasks_target, &task_size_min, &task_size_max,
+			   &input_size_min, &input_size_max, &output_size_min, &output_size_max) != 12) { // jennifer
 			FATAL(2, "cannot load configuration: invalid gentask parameters: %s", trim(buf));
 		}
 		if (util_cpu > util_target) {
