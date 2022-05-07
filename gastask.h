@@ -23,7 +23,7 @@ typedef struct {
 	taskattrs_t taskattrs_cloud; // jennifer
 	taskattrs_t	taskattrs_cpufreq;
 	taskattrs_t	taskattrs_offloadingratio; // jennifer
-	double		util, power, score, power_idle, power_active, power_netcom; // jennifer
+	double		util, power, score, mem_power, cpu_power, power_netcom; // jennifer
 	unsigned 	period_violation; // jennifer
 	struct list_head	list_util;
 	struct list_head	list_power;
@@ -103,7 +103,7 @@ void add_cloud(const char *typestr, double computation_power, double power_activ
 void add_network(unsigned uplink, unsigned downlink); // jennifer
 void add_net_commander(unsigned intercept_out, unsigned intercept_in); // jennifer
 
-void get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud_type, unsigned char cpufreq_type, unsigned char *offloadingratio, double *putil, double *ppower_cpu, double *ppower_mem, double *ppower_net_com, double *pdeadline); //gyuri
+void get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud_type, unsigned char cpufreq_type, unsigned char offloadingratio, double *putil, double *ppower_cpu, double *ppower_mem, double *ppower_net_com, double *pdeadline); //gyuri
 unsigned get_task_memreq(unsigned no_task);
 
 void init_report(void);

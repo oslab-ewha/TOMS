@@ -98,7 +98,7 @@ save_task_infos(void)
 	
 	printf("power: %.6lf util: %.6lf\n", gene->power, gene->util);
 	// printf("active power: %.6lf idle power: %.6lf\n", gene->power_active, gene->power_idle); // jennifer
-	printf("active power: %.6lf network power: %.6lf\n", gene->power_active, gene->power_netcom); // jennifer
+	printf("cpu power: %.6lf memory power: %.6lf network power: %.6lf\n", gene->cpu_power, gene->mem_power, gene->power_netcom); // jennifer
 	printf("offloading ratio: %.6lf\n", n_offloading/(double)n_tasks); // jennifer
 	printf("cpu frequency: \n1\t0.5\t0.25\t0.125 \n"); // jennifer
 	printf("%d\t%d\t%d\t%d \n", cpufreq0, cpufreq1, cpufreq2, cpufreq3); // jennifer

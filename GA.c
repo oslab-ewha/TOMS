@@ -221,7 +221,7 @@ check_utilpower(gene_t *gene)
 	for (i = 0; i < n_tasks; i++) {
 		double	task_util, task_power_cpu, task_power_mem, task_power_net_com, task_deadline;
 		
-		get_task_utilpower(i, gene->taskattrs_mem.attrs[i], gene->taskattrs_cloud.attrs[i], gene->taskattrs_cpufreq.attrs[i], &gene->taskattrs_offloadingratio.attrs[i],
+		get_task_utilpower(i, gene->taskattrs_mem.attrs[i], gene->taskattrs_cloud.attrs[i], gene->taskattrs_cpufreq.attrs[i], gene->taskattrs_offloadingratio.attrs[i],
 				   &task_util, &task_power_cpu, &task_power_mem, &task_power_net_com, &task_deadline); //gyuri
 		util_new += task_util;
 		power_new_sum_cpu += task_power_cpu;
@@ -243,19 +243,20 @@ check_utilpower(gene_t *gene)
 	}
 	*/
 	power_new = power_new_sum_cpu + power_new_sum_mem + power_new_sum_net_com; //ADDMEM
+	gene->cpu_power = power_new_sum_cpu;
+	gene->mem_power = power_new_sum_mem;
+	gene->power_netcom = power_new_sum_net_com;
 	// power_new = power_new_sum_cpu + power_new_sum_net_com; // jennifer
 	gene->period_violation = violate_period;
 	// idle power set to zero
 	if (util_new < 1.0 && violate_period == 0) { // jennifer
 		power_new_idle = cpufreqs[n_cpufreqs - 1].power_idle * (1 - util_new); // jennifer
 		power_new += power_new_idle;
-		gene->power_idle = power_new_idle; // jennifer
+		gene->cpu_power += power_new_idle;
 	}
 	gene->util = util_new;
 	if (util_new <= cutoff) {
 		gene->power = power_new;
-		gene->power_active = power_new - gene->power_idle - power_new_sum_net_com; // jennifer
-		gene->power_netcom = power_new_sum_net_com; // jennifer
 		gene->score = power_new;
 		if (util_new >= 1.0 || violate_period > 0) // jennifer
 			gene->score += power_new * (util_new - 1.0) * penalty;
