@@ -25,7 +25,7 @@ simrts_conf=/tmp/simrts$$.conf
 COMMON_CONF="\
 # max_generations n_populations cutoff penalty
 *genetic
-10000 100 1.3 1.5
+10000 100 1.5 1.5
 
 # wcet_min wcet_max mem_total util_cpu util_target n_tasks task_size_min task_size_max input_size_min input_size_max output_size_min output_size_max
 *gentask
@@ -81,20 +81,22 @@ echo "
 
 cat ./task_generated.txt >>$gastask_conf
 
-mkdir ./tmp/output$$
-mv ./task_generated.txt ./tmp/output$$/task_generated_$utilTarget+$$.txt
-mv ./network_commander_generated.txt ./tmp/output$$/network_commander_generated_$utilTarget+$$.txt
+mkdir ./tmp/output_$utilTarget+$$
+OUTPUT=./tmp/output_$utilTarget+$$
+mv ./task_generated.txt $OUTPUT/gen_task_generated_$utilTarget+$$.txt
+mv ./network_commander_generated.txt $OUTPUT/gen_network_commander_generated_$utilTarget+$$.txt
 
-touch ./tmp/output$$/output_$utilTarget+$networkUp.txt
-echo "*ecvs\n" >> ./tmp/output$$/output_$utilTarget+$networkUp.txt
-'./gastask' $gastask_conf >> ./tmp/output$$/output_$utilTarget+$networkUp.txt
-
+touch $OUTPUT/output_$utilTarget+$networkUp.txt
+echo "*ecvs\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+'./gastask' $gastask_conf >> $OUTPUT/output_$utilTarget+$networkUp.txt
+mv task.txt $OUTPUT/task_$utilTarget+$networkUp+ecvs.txt
 sed -i "" "20s/0.5/\#0.5/" $gastask_conf
 sed -i "" "21s/0.25/\#0.25/" $gastask_conf
 sed -i "" "22s/0.125/\#0.125/" $gastask_conf
 
-echo "\n*offloading\n" >> ./tmp/output$$/output_$utilTarget+$networkUp.txt
-'./gastask' $gastask_conf >> ./tmp/output$$/output_$utilTarget+$networkUp.txt
+echo "\n*offloading\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+'./gastask' $gastask_conf >> $OUTPUT/output_$utilTarget+$networkUp.txt
+mv task.txt $OUTPUT/task_$utilTarget+$networkUp+offloading.txt
 
 sed -i "" "20s/\#0.5/0.5/" $gastask_conf
 sed -i "" "21s/\#0.25/0.25/" $gastask_conf
@@ -102,14 +104,16 @@ sed -i "" "22s/\#0.125/0.125/" $gastask_conf
 
 sed -i "" "36s/1/\#1/" $gastask_conf
 
-echo "\n*dvfs\n" >> ./tmp/output$$/output_$utilTarget+$networkUp.txt
-'./gastask' $gastask_conf >> ./tmp/output$$/output_$utilTarget+$networkUp.txt
+echo "\n*dvfs\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+'./gastask' $gastask_conf >> $OUTPUT/output_$utilTarget+$networkUp.txt
+mv task.txt $OUTPUT/task_$utilTarget+$networkUp+dvfs.txt
 
 sed -i "" "20s/0.5/\#0.5/" $gastask_conf
 sed -i "" "21s/0.25/\#0.25/" $gastask_conf
 sed -i "" "22s/0.125/\#0.125/" $gastask_conf
-echo "\n*nothing\n" >> ./tmp/output$$/output_$utilTarget+$networkUp.txt
-'./gastask' $gastask_conf >> ./tmp/output$$/output_$utilTarget+$networkUp.txt
+echo "\n*nothing\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+'./gastask' $gastask_conf >> $OUTPUT/output_$utilTarget+$networkUp.txt
+mv task.txt $OUTPUT/task_$utilTarget+$networkUp+nothing.txt
 
 sed -i "" "20s/\#0.5/0.5/" $gastask_conf
 sed -i "" "21s/\#0.25/0.25/" $gastask_conf
@@ -124,17 +128,19 @@ do
 	sed -i "" "s/$var3 $var4/$var $var2/g" $gastask_conf
 	networkUp=$var
 	networkDown=$var2
-	touch ./tmp/output$$/output_$utilTarget+$networkUp.txt
+	touch $OUTPUT/output_$utilTarget+$networkUp.txt
 
-	echo "*ecvs\n" >> ./tmp/output$$/output_$utilTarget+$networkUp.txt
-	'./gastask' $gastask_conf >> ./tmp/output$$/output_$utilTarget+$networkUp.txt
+	echo "*ecvs\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+	'./gastask' $gastask_conf >> $OUTPUT/output_$utilTarget+$networkUp.txt
+	mv task.txt $OUTPUT/task_$utilTarget+$networkUp+ecvs.txt
 
 	sed -i "" "20s/0.5/\#0.5/" $gastask_conf
 	sed -i "" "21s/0.25/\#0.25/" $gastask_conf
 	sed -i "" "22s/0.125/\#0.125/" $gastask_conf
 
-	echo "\n*offloading\n" >> ./tmp/output$$/output_$utilTarget+$networkUp.txt
-	'./gastask' $gastask_conf >> ./tmp/output$$/output_$utilTarget+$networkUp.txt
+	echo "\n*offloading\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+	'./gastask' $gastask_conf >> $OUTPUT/output_$utilTarget+$networkUp.txt
+	mv task.txt $OUTPUT/task_$utilTarget+$networkUp+offloading.txt
 
 	sed -i "" "20s/\#0.5/0.5/" $gastask_conf
 	sed -i "" "21s/\#0.25/0.25/" $gastask_conf
@@ -142,17 +148,22 @@ do
 
 	sed -i "" "36s/1/\#1/" $gastask_conf
 
-	echo "\n*dvfs\n" >> ./tmp/output$$/output_$utilTarget+$networkUp.txt
-	'./gastask' $gastask_conf >> ./tmp/output$$/output_$utilTarget+$networkUp.txt
+	echo "\n*dvfs\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+	'./gastask' $gastask_conf >> $OUTPUT/output_$utilTarget+$networkUp.txt
+	mv task.txt $OUTPUT/task_$utilTarget+$networkUp+dvfs.txt
+
 
 	sed -i "" "20s/0.5/\#0.5/" $gastask_conf
 	sed -i "" "21s/0.25/\#0.25/" $gastask_conf
 	sed -i "" "22s/0.125/\#0.125/" $gastask_conf
-	echo "\n*nothing\n" >> ./tmp/output$$/output_$utilTarget+$networkUp.txt
-	'./gastask' $gastask_conf >> ./tmp/output$$/output_$utilTarget+$networkUp.txt
+	echo "\n*nothing\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+	'./gastask' $gastask_conf >> $OUTPUT/output_$utilTarget+$networkUp.txt
+	mv task.txt $OUTPUT/task_$utilTarget+$networkUp+nothing.txt
 
 	sed -i "" "20s/\#0.5/0.5/" $gastask_conf
 	sed -i "" "21s/\#0.25/0.25/" $gastask_conf
 	sed -i "" "22s/\#0.125/0.125/" $gastask_conf
 	sed -i "" "36s/\#1/1/" $gastask_conf
 done
+
+mv $gastask_conf $OUTPUT/gastask_$utilTarget+$$.conf
