@@ -22,7 +22,7 @@ get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud
 	double	wcet_scaled_mem = 1 / mem->wcet_scale;
 	double	wcet_scaled_cloud = 1 / cloud->computation_power; // jennifer
 	double	cpu_power_unit;
-	double  net_com_power_unit = 150; // jennifer
+	double  net_com_power_unit = 75; // jennifer
 	double	wcet_scaled;
 	double	transtime; // gyuri
 	double  netcomtime; // jennifer
@@ -38,9 +38,9 @@ get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud
 	*pdeadline = (wcet_scaled_cloud * task->wcet + wcet_scaled_cpu * netcomtime + transtime) / (task->period) * offloadingratios[offloadingratio]; //gyuri // jennifer
 	cpu_power_unit = (cpufreq->power_active * wcet_scaled_cpu + cpufreq->power_idle * wcet_scaled_mem) / (wcet_scaled_cpu + wcet_scaled_mem);
 	*ppower_cpu = cpu_power_unit * (wcet_scaled / task->period) * (1 - offloadingratios[offloadingratio]) + cpu_power_unit * (netcomtime / task->period) * (offloadingratios[offloadingratio]);// gyuri // jennifer
-	*ppower_net_com = net_com_power_unit * (transtime / task->period) * offloadingratios[offloadingratio];  // jennifer
-	*ppower_mem = task->memreq * (task->mem_active_ratio * mem->power_active + (1 - task->mem_active_ratio) * mem->power_idle) * wcet_scaled / task->period +
-		task->memreq * mem->power_idle * (1 - wcet_scaled / task->period);  // not used
+	*ppower_net_com = net_com_power_unit * ((transtime + netcomtime) / task->period) * offloadingratios[offloadingratio];  // jennifer
+	*ppower_mem = (task->memreq * (task->mem_active_ratio * mem->power_active + (1 - task->mem_active_ratio) * mem->power_idle) * wcet_scaled / task->period +
+		task->memreq * mem->power_idle * (1 - wcet_scaled / task->period));  // * (1 - offloadingratios[offloadingratio]);
 	//printf("cpu: %lf net_com: %lf mem: %lf\n", *ppower_cpu, *ppower_net_com, *ppower_mem);
 	// printf("wcet_scaled: %lf, transtime: %lf, netcomtime: %lf\n", wcet_scaled, transtime, netcomtime); // jennifer delete
 }
