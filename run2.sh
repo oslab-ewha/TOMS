@@ -1,6 +1,6 @@
 function usage() {
     cat <<EOF
-Usage: run.sh <util> <util cpu> <network_up> <network_down>
+Usage: run2.sh <util> <util cpu> <network_up> <network_down>
 EOF
 }
 
@@ -87,9 +87,9 @@ mv ./task_generated.txt $OUTPUT/gen_task_generated_$utilTarget+$$.txt
 mv ./network_commander_generated.txt $OUTPUT/gen_network_commander_generated_$utilTarget+$$.txt
 
 touch $OUTPUT/output_$utilTarget+$networkUp.txt
-echo "*ecvs\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+echo "*tovs\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
 './gastask' $gastask_conf >> $OUTPUT/output_$utilTarget+$networkUp.txt
-mv task.txt $OUTPUT/task_$utilTarget+$networkUp+ecvs.txt
+mv task.txt $OUTPUT/task_$utilTarget+$networkUp+tovs.txt
 sed -i "20s/0.5/\#0.5/" $gastask_conf
 sed -i "21s/0.25/\#0.25/" $gastask_conf
 sed -i "22s/0.125/\#0.125/" $gastask_conf
@@ -130,9 +130,9 @@ do
 	networkDown=$var2
 	touch $OUTPUT/output_$utilTarget+$networkUp.txt
 
-	echo "*ecvs\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+	echo "*tovs\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
 	'./gastask' $gastask_conf >> $OUTPUT/output_$utilTarget+$networkUp.txt
-	mv task.txt $OUTPUT/task_$utilTarget+$networkUp+ecvs.txt
+	mv task.txt $OUTPUT/task_$utilTarget+$networkUp+tovs.txt
 
 	sed -i "20s/0.5/\#0.5/" $gastask_conf
 	sed -i "21s/0.25/\#0.25/" $gastask_conf

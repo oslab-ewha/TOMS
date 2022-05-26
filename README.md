@@ -1,11 +1,11 @@
-# ECVS (Edge Computing & Voltage Scaling)
+# TOVS (Task Offloading & Voltage Scaling)
 Edge Computing &amp; Voltage Scaling
 
 This project demonstrates that a GA(genetic algorithm) approach can provide power-efficient scheduling for real-time tasks that makes use of DVS(dynamic voltage scaling) and edge computing. 
 
 Two executagles included in this project.
-- gasgen: task generation tool based on CPU and total utilization
-- gastask: scheduling scheme generator based on GA
+- `gasgen`: task generation tool based on CPU and total utilization
+- `gastask`: scheduling scheme generator based on GA
 
 For comparison purposes, our basic simulator supporting dynamic voltage scaling (DVS) and hybrid memory (HM) can be downloaded at https://github.com/oslab-ewha/simrts.
 
@@ -16,8 +16,8 @@ Just make to build gastask
 ```
 
 ## Run
-- Create a new configuration file. Refer to gastask.conf.tmpl.
-- run gasgen
+- Create a new configuration file. Refer to `gastask.conf.tmpl`.
+- run `gasgen`
 ```
 # ./gasgen gastask.conf
 ```
@@ -32,4 +32,7 @@ Just make to build gastask
 - scheduling information is generated in <code>task.txt</code>, which can be used as an input to simrts.
 
 ## Batch run
-- runsim.sh performs all procedures in batch including simrts run
+- `run.sh` performs all procedures in batch
+  - Before do `run.sh`, it need `./tmp` folder in root 
+  - use `run.sh` for mac, use `run2.sh` for window
+
