@@ -1,4 +1,4 @@
-#include "gasgen.h" // jennifer
+#include "gasgen.h" 
 
 unsigned intercept_out_min, intercept_out_max, intercept_in_min, intercept_in_max;
 unsigned n_net_commander_target;

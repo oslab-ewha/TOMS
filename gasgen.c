@@ -59,8 +59,8 @@ main(int argc, char *argv[])
 	srand(getpid() + time(NULL));
 
 	gen_task();
-	gen_network(); // jennifer
-	gen_net_commander(); // jennifer
+	gen_network(); 
+	gen_net_commander(); 
 
 	return 0;
 }

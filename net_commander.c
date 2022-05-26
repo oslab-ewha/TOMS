@@ -1,4 +1,4 @@
-#include "gastask.h" // jennifer
+#include "gastask.h" 
 
 net_commander_t	net_commanders[MAX_NETCOMMANDERS];
 unsigned	n_net_commanders;

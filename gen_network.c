@@ -1,4 +1,4 @@
-#include "gasgen.h" // jennifer
+#include "gasgen.h" 
 
 unsigned uplink_min, uplink_max, downlink_min, downlink_max;
 unsigned n_networks_target;

@@ -30,12 +30,12 @@ typedef enum {
 	SECT_CPUFREQ,
 	SECT_MEM,
 	SECT_TASK,
-	SECT_GENNETWORK, // jennifer
-	SECT_GENNETCOMMANDER, // jennifer
-	SECT_CLOUD, // jennifer
-	SECT_OFFLOADINGRATIO, // jennifer
-	SECT_NETWORK, // jennifer
-	SECT_NET_COMMANDER // jennifer 	
+	SECT_GENNETWORK, 
+	SECT_GENNETCOMMANDER, 
+	SECT_CLOUD, 
+	SECT_OFFLOADINGRATIO, 
+	SECT_NETWORK, 
+	SECT_NET_COMMANDER  	
 } section_t;
 
 typedef struct {
@@ -47,8 +47,8 @@ typedef struct {
 
 extern unsigned	n_mems;
 extern mem_t	mems[];
-extern unsigned n_offloadingratios; // jennifer
-extern double   offloadingratios[]; // jennifer
+extern unsigned n_offloadingratios; 
+extern double   offloadingratios[]; 
 
 void errmsg(const char *fmt, ...);
 void load_conf(const char *fpath);

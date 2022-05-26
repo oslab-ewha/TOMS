@@ -7,8 +7,8 @@ unsigned	max_gen = 100000;
 
 double		cutoff, penalty;
 
-unsigned	n_clouds; // jennifer
-cloud_t  clouds[MAX_CLOUDS]; // jennifer
+unsigned	n_clouds; 
+cloud_t  clouds[MAX_CLOUDS]; 
 
 LIST_HEAD(genes_by_util);
 LIST_HEAD(genes_by_power);
@@ -128,8 +128,7 @@ check_memusage(gene_t *gene)
    double   mem_used[MAX_MEMS] = { 0, };
    int   i;
    for (i = 0; i < n_tasks; i++) {
-		// mem_used[gene->taskattrs_mem.attrs[i]] += get_task_memreq(i);
-      mem_used[gene->taskattrs_mem.attrs[i]] += get_task_memreq(i) * (double) (1.0 - offloadingratios[gene->taskattrs_offloadingratio.attrs[i]]); // jennifer
+      mem_used[gene->taskattrs_mem.attrs[i]] += get_task_memreq(i) * (double) (1.0 - offloadingratios[gene->taskattrs_offloadingratio.attrs[i]]); 
    }
    for (i = 0; i < n_mems; i++) {
       if (mem_used[i] > (double) mems[i].max_capacity)
@@ -140,8 +139,6 @@ check_memusage(gene_t *gene)
    }
    return TRUE;
 }
-
-// may need a function to balance cloud types (if using more than one cloud)
 
 static void
 balance_mem_types(gene_t *gene)
@@ -200,12 +197,12 @@ lower_utilization_by_attr(taskattrs_t *taskattrs)
 static void
 lower_utilization(gene_t *gene)
 {
-	if (get_rand(n_cpufreqs + n_offloadingratios) < n_cpufreqs) { // jennifer 
+	if (get_rand(n_cpufreqs + n_offloadingratios) < n_cpufreqs) {  
 		if (!lower_utilization_by_attr(&gene->taskattrs_cpufreq))
-			lower_utilization_by_attr(&gene->taskattrs_offloadingratio); // jennifer
+			lower_utilization_by_attr(&gene->taskattrs_offloadingratio); 
 	}
 	else {
-		if (!lower_utilization_by_attr(&gene->taskattrs_offloadingratio)) // jennifer
+		if (!lower_utilization_by_attr(&gene->taskattrs_offloadingratio)) 
 			lower_utilization_by_attr(&gene->taskattrs_cpufreq);
 	}
 }
@@ -215,8 +212,8 @@ check_utilpower(gene_t *gene)
 {
 	double	util_new = 0, power_new, power_new_sum_cpu = 0, power_new_sum_mem = 0, power_new_idle = 0, power_new_sum_net_com = 0;
 
-	int	i, violate_period = 0, num_offloading = 0; // jennifer
-	// int violate_offloading = 0; // jennifer
+	int	i, violate_period = 0, num_offloading = 0; 
+	// int violate_offloading = 0; 
 
 	for (i = 0; i < n_tasks; i++) {
 		double	task_util, task_power_cpu, task_power_mem, task_power_net_com, task_deadline;
@@ -227,13 +224,13 @@ check_utilpower(gene_t *gene)
 		power_new_sum_cpu += task_power_cpu;
 		power_new_sum_mem += task_power_mem;
 		power_new_sum_net_com += task_power_net_com;
-		if(task_deadline > 1.0) // jennifer
+		if(task_deadline > 1.0) 
 			violate_period ++;
 		if((unsigned)gene->taskattrs_offloadingratio.attrs[i] != 0)
 			num_offloading++;
 	}
 	/*
-	for(i = 0; i < n_clouds; i++) // jennifer
+	for(i = 0; i < n_clouds; i++) 
 		{
 			if((double)num_offloading > clouds[i].offloading_limit * n_tasks)
 			{
@@ -246,11 +243,10 @@ check_utilpower(gene_t *gene)
 	gene->cpu_power = power_new_sum_cpu;
 	gene->mem_power = power_new_sum_mem;
 	gene->power_netcom = power_new_sum_net_com;
-	// power_new = power_new_sum_cpu + power_new_sum_net_com; // jennifer
+	// power_new = power_new_sum_cpu + power_new_sum_net_com; 
 	gene->period_violation = violate_period;
-	// idle power set to zero
-	if (util_new < 1.0 && violate_period == 0) { // jennifer
-		power_new_idle = cpufreqs[n_cpufreqs - 1].power_idle * (1 - util_new); // jennifer
+	if (util_new < 1.0 && violate_period == 0) { 
+		power_new_idle = cpufreqs[n_cpufreqs - 1].power_idle * (1 - util_new); 
 		power_new += power_new_idle;
 		gene->cpu_power += power_new_idle;
 	}
@@ -258,10 +254,8 @@ check_utilpower(gene_t *gene)
 	if (util_new <= cutoff) {
 		gene->power = power_new;
 		gene->score = power_new;
-		if (util_new >= 1.0 || violate_period > 0) // jennifer
+		if (util_new >= 1.0 || violate_period > 0) 
 			gene->score += power_new * (util_new - 1.0) * penalty;
-		 //if(violate_offloading == 1) // jennifer
-			//gene->score += power_new * (util_new - 1.0) * penalty * 10;
 		return TRUE;
 	}
 	return FALSE;
@@ -274,15 +268,15 @@ init_gene(gene_t *gene)
 
 	assign_taskattrs(&gene->taskattrs_mem, n_mems);
 	assign_taskattrs(&gene->taskattrs_cpufreq, n_cpufreqs);
-	assign_taskattrs(&gene->taskattrs_cloud, n_clouds); // jennifer
-	assign_taskattrs(&gene->taskattrs_offloadingratio, n_offloadingratios); // jennifer
+	assign_taskattrs(&gene->taskattrs_cloud, n_clouds); 
+	assign_taskattrs(&gene->taskattrs_offloadingratio, n_offloadingratios); 
 
 	for (i = 0; i < MAX_TRY; i++) {
 		INIT_LIST_HEAD(&gene->list_util);
 		INIT_LIST_HEAD(&gene->list_power);
 		INIT_LIST_HEAD(&gene->list_score);
 		
-		if (!check_memusage(gene)) { //ADDMEM
+		if (!check_memusage(gene)) {
 			balance_mem_types(gene);
 			continue;
 		}
@@ -325,10 +319,10 @@ static BOOL
 do_crossover(gene_t *newborn, gene_t *gene1, gene_t *gene2, unsigned crosspt_ratio, unsigned crosspt_cpufreq, unsigned crosspt_mem) // ADDMEM
 {
 	inherit_values(&newborn->taskattrs_mem, &gene1->taskattrs_mem, &gene2->taskattrs_mem, crosspt_mem); //ADDMEM
-	inherit_values(&newborn->taskattrs_offloadingratio, &gene1->taskattrs_offloadingratio, &gene2->taskattrs_offloadingratio, crosspt_ratio); // jennifer
+	inherit_values(&newborn->taskattrs_offloadingratio, &gene1->taskattrs_offloadingratio, &gene2->taskattrs_offloadingratio, crosspt_ratio); 
 	inherit_values(&newborn->taskattrs_cpufreq, &gene1->taskattrs_cpufreq, &gene2->taskattrs_cpufreq, crosspt_cpufreq);
 	
-	if (!check_memusage(newborn)) //ADDMEM
+	if (!check_memusage(newborn))
 		return FALSE;
 	if (!check_utilpower(newborn))
 		return FALSE;
@@ -390,17 +384,17 @@ crossover(void)
 	newborn = get_newborn();
 	for (i = 0; i < MAX_TRY; i++) {
 		gene_t	*gene1, *gene2;
-		unsigned	crosspt_ratio, crosspt_cpufreq, crosspt_mem; // jennifer // ADDMEM
+		unsigned	crosspt_ratio, crosspt_cpufreq, crosspt_mem;  // ADDMEM
 	
 		gene1 = select_gene();
 		do {
 			gene2 = select_gene();
 		} while (gene1 == gene2);
 
-		crosspt_ratio = get_rand(n_tasks - 1) + 1; // jennifer
+		crosspt_ratio = get_rand(n_tasks - 1) + 1; 
 		crosspt_cpufreq = get_rand(n_tasks - 1) + 1;
 		crosspt_mem = get_rand(n_tasks - 1) + 1; // ADDMEM
-		if (do_crossover(newborn, gene1, gene2, crosspt_ratio, crosspt_cpufreq, crosspt_mem)) // jennifer // ADDMEM
+		if (do_crossover(newborn, gene1, gene2, crosspt_ratio, crosspt_cpufreq, crosspt_mem))  // ADDMEM
 			break;
 	}
 	if (i == MAX_TRY) {

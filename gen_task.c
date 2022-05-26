@@ -4,8 +4,8 @@ unsigned	wcet_min, wcet_max, mem_total;
 double		util_cpu, util_target;
 unsigned	n_tasks_target;
 unsigned	task_size_min, task_size_max;
-unsigned	input_size_min, input_size_max; // jennifer
-unsigned	output_size_min, output_size_max; // jennifer
+unsigned	input_size_min, input_size_max; 
+unsigned	output_size_min, output_size_max; 
 static double	util_sum_cpu, util_cpu_1task;
 static unsigned	memreq_1task;
 static unsigned	memreq_total;
@@ -42,7 +42,7 @@ do_gen_task(FILE *fp, int i, unsigned *offloading_bool)
 	unsigned	duration, memreq;
 	double		mem_active_ratio;
 	unsigned	task_size;
-	unsigned    input_data_size, output_data_size; // jennifer
+	unsigned    input_data_size, output_data_size; 
 
 	wcet = wcet_min + get_rand(wcet_max - wcet_min + 1);
 	duration = (unsigned)(wcet / util_cpu_1task);
@@ -52,13 +52,13 @@ do_gen_task(FILE *fp, int i, unsigned *offloading_bool)
 	mem_active_ratio = 0.1 + get_rand(1000) / 10000.0 - get_rand(1000) / 10000.0;
 
 	task_size = task_size_min + get_rand(task_size_max - task_size_min + 1);
-	input_data_size = input_size_min + get_rand(input_size_max - input_size_min + 1); // jennifer
-	output_data_size = output_size_min + get_rand(output_size_max - output_size_min + 1); // jennifer
+	input_data_size = input_size_min + get_rand(input_size_max - input_size_min + 1); 
+	output_data_size = output_size_min + get_rand(output_size_max - output_size_min + 1); 
 
 	util_sum_cpu += ((double)wcet / duration);
 	memreq_total += memreq;
 
-	fprintf(fp, "%u %u %u %lf %u %u %u %u\n", wcet, duration, memreq, mem_active_ratio, task_size, input_data_size, output_data_size, offloading_bool[i]); // jennifer
+	fprintf(fp, "%u %u %u %lf %u %u %u %u\n", wcet, duration, memreq, mem_active_ratio, task_size, input_data_size, output_data_size, offloading_bool[i]); 
 }
 
 static double

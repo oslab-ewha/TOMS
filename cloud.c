@@ -1,4 +1,4 @@
-#include "gastask.h" // jennifer
+#include "gastask.h" 
 
 cloud_t	clouds[MAX_CLOUDS];
 unsigned	n_clouds;

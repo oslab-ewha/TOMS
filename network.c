@@ -1,4 +1,4 @@
-#include "gastask.h" // jennifer
+#include "gastask.h" 
 
 network_t	networks[MAX_NETWORKS];
 unsigned	n_networks;

@@ -1,4 +1,4 @@
-#include "gastask.h" // jennifer
+#include "gastask.h" 
 
 double	offloadingratios[MAX_OFFLOADING_RATIOS];
 unsigned	n_offloadingratios;

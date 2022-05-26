@@ -34,17 +34,17 @@ check_section(const char *line)
 		return SECT_MEM;
 	if (strncmp(line + 1, "task", 4) == 0)
 		return SECT_TASK;
-	if(strncmp(line + 1, "gennetwork", 10) == 0) // jennifer
+	if(strncmp(line + 1, "gennetwork", 10) == 0) 
 		return SECT_GENNETWORK;
-	if(strncmp(line + 1, "gennetcommander", 15) == 0) // jennifer
+	if(strncmp(line + 1, "gennetcommander", 15) == 0) 
 		return SECT_GENNETCOMMANDER;
-	if(strncmp(line + 1, "cloud", 5) == 0) // jennifer
+	if(strncmp(line + 1, "cloud", 5) == 0) 
 		return SECT_CLOUD;
-	if(strncmp(line + 1, "offloadingratio", 15) == 0) // jennifer
+	if(strncmp(line + 1, "offloadingratio", 15) == 0) 
 		return SECT_OFFLOADINGRATIO;
-	if(strncmp(line + 1, "network", 7) == 0) // jennifer
+	if(strncmp(line + 1, "network", 7) == 0) 
 		return SECT_NETWORK;
-	if(strncmp(line + 1, "netcommander", 12) == 0) // jennifer
+	if(strncmp(line + 1, "netcommander", 12) == 0) 
 		return SECT_NET_COMMANDER;
 	return SECT_UNKNOWN;
 }

@@ -68,24 +68,24 @@ static void
 save_task_infos(void)
 {
 	gene_t	*gene;
-	int	i, n_offloading = 0, cpufreq0 = 0, cpufreq1 = 0, cpufreq2 = 0, cpufreq3 = 0; // jennifer
+	int	i, n_offloading = 0, cpufreq0 = 0, cpufreq1 = 0, cpufreq2 = 0, cpufreq3 = 0; 
 
 	fp = fopen("task.txt", "w");
 	if (fp == NULL){
 		FATAL(2, "cannot open task.txt");
 	}
 
-	fprintf(fp, "# mem_idx cpufreq_idx cloud_idx offloadingratio_idx\n"); // jennifer
+	fprintf(fp, "# mem_idx cpufreq_idx cloud_idx offloadingratio_idx\n"); 
 	gene = list_entry(genes_by_power.next, gene_t, list_power);
 	if (gene->util > 2.0) {
 		FATAL(2, "over-utilized gene: %lf", gene->util);
 	}
 	for (i = 0; i < n_tasks; i++) {
 		fprintf(fp, "%u %u %u %u\n", (unsigned)gene->taskattrs_mem.attrs[i], (unsigned)gene->taskattrs_cpufreq.attrs[i],
-		(unsigned)gene->taskattrs_cloud.attrs[i], (unsigned)gene->taskattrs_offloadingratio.attrs[i]); // jennifer
+		(unsigned)gene->taskattrs_cloud.attrs[i], (unsigned)gene->taskattrs_offloadingratio.attrs[i]); 
 		if((unsigned)gene->taskattrs_offloadingratio.attrs[i] != 0)
 			n_offloading++;
-		if((unsigned)gene->taskattrs_cpufreq.attrs[i] == 0) // jennifer
+		if((unsigned)gene->taskattrs_cpufreq.attrs[i] == 0) 
 			cpufreq0++;
 		else if ((unsigned)gene->taskattrs_cpufreq.attrs[i] == 1)
 			cpufreq1++;
@@ -97,12 +97,11 @@ save_task_infos(void)
 	fclose(fp);
 	
 	printf("power: %.6lf util: %.6lf\n", gene->power, gene->util);
-	// printf("active power: %.6lf idle power: %.6lf\n", gene->power_active, gene->power_idle); // jennifer
-	printf("cpu power: %.6lf memory power: %.6lf network power: %.6lf\n", gene->cpu_power, gene->mem_power, gene->power_netcom); // jennifer
-	printf("offloading ratio: %.6lf\n", n_offloading/(double)n_tasks); // jennifer
-	printf("cpu frequency: \n1\t0.5\t0.25\t0.125 \n"); // jennifer
-	printf("%d\t%d\t%d\t%d \n", cpufreq0, cpufreq1, cpufreq2, cpufreq3); // jennifer
-	printf("period violation: %u\n", gene->period_violation); // jennifer
+	printf("cpu power: %.6lf memory power: %.6lf network power: %.6lf\n", gene->cpu_power, gene->mem_power, gene->power_netcom); 
+	printf("offloading ratio: %.6lf\n", n_offloading/(double)n_tasks); 
+	printf("cpu frequency: \n1\t0.5\t0.25\t0.125 \n"); 
+	printf("%d\t%d\t%d\t%d \n", cpufreq0, cpufreq1, cpufreq2, cpufreq3); 
+	printf("period violation: %u\n", gene->period_violation); 
 }
 
 void
