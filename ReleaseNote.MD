@@ -2,7 +2,7 @@
 
 ## Part 1
 
-1. `make` 명령어를 통해 실행프로그램을 만든다. 만일 각 실행 프로그램이 접근 권한이 없다고 하면`chmod` 명령어를 통해 접근 권한을 변경한다. 
+1. `make` 명령어를 통해 실행 프로그램을 만든다. 만일 각 실행 프로그램이 접근 권한이 없다고 하면`chmod` 명령어를 통해 접근 권한을 변경한다. 
 ```
 # make
 ```
@@ -23,11 +23,11 @@
 10. 상세 스케줄링 결과를 `task.txt`에서 확인 할 수 있다. 
 
 ## Part 2
-tovs, offloading only, dvfs only, default 값을 `gastask.conf`파일을 수정함으로 확인할 수 있다. 
-### tovs
-Part 1 과 같이 수행한다. 
-### offloading only
-  1. tovs에서 사용한 `gastask.conf`파일의 *cpufreq 아래 부분의 첫째줄을 제외하고 주석처리한다. 
+TOVS, Offloading Only, DVFS Only, Default 값을 `gastask.conf`파일을 수정함으로 확인할 수 있다. 
+### TOVS
+Part1 과 같은 방법으로 실행한다. 
+### Offloading Only
+  1. TOVS에서 사용한 `gastask.conf`파일의 *cpufreq 아래 부분의 첫째줄을 제외하고 주석처리한다. 
 ```
   # wcet_sacle power_active power_idle
 *cpufreq
@@ -38,8 +38,8 @@ Part 1 과 같이 수행한다.
 ```
   2. `gastask`를 실행한다. 
 
-### dvfs only
-  1. tovs에서 사용한 `gastask.conf`파일의 *offloadingratio 아래 부분의 첫째줄을 제외하고 주석처리한다. 
+### DVFS Only
+  1. TOVS에서 사용한 `gastask.conf`파일의 *offloadingratio 아래 부분의 첫째줄을 제외하고 주석처리한다. 
 ```
 # offloading_ratio 
 *offloadingratio
@@ -48,9 +48,9 @@ Part 1 과 같이 수행한다.
 ```
   2. `gastask`를 실행한다. 
 
-### default
-  offloading, dvfs 기법 모두 사용하지 않을 경우를 나타낸다.
-  1. tovs에서 사용한 `gastask.conf`파일의 *cpufreq 아래 부분의 첫째줄을 제외하고 주석처리한다. *offloadingratio 아래 부분의 첫째줄을 제외하고 주석처리한다. 
+### Default
+  Offloading, DVFS 기법 모두 사용하지 않을 경우를 나타낸다.
+  1. TOVS에서 사용한 `gastask.conf`파일의 *cpufreq 아래 부분의 첫째줄을 제외하고 주석처리한다. *offloadingratio 아래 부분의 첫째줄을 제외하고 주석처리한다. 
 ```
   # wcet_sacle power_active power_idle
 *cpufreq
@@ -68,11 +68,11 @@ Part 1 과 같이 수행한다.
 
 # Part 3
 Part1 과 Part2의 내용을 자동화 하여 사용한다. 
-uplink 네트워크 속도가 10일때부터 120까지 10 단위로 같은 태스크에 대해 적용된다. 
+Uplink 네트워크 속도가 10일때부터 120까지 10 단위로 같은 태스크에 대해 적용된다. 
 1. root 폴더 내부에 tmp 폴더를 생성한다.
 2. `./run.sh` (for mac) 이나 `./run2.sh`(for linux) 를 사용한다. 
-   순서대로 총 utilization, CPU utilization, network uplink, network downlink 의 값을 넣을 수 있다.
-   network uplink와 downlink의 `10 100` 이 default 값이다.
+   순서대로 총 Utilization, CPU Utilization, Network Uplink, Network Downlink 의 값을 넣을 수 있다.
+   Network Uplink와 downlink의 `10 100` 이 Default 값이다.
 ```
   # ./run.sh <util> <util cpu> 10 100
 ```
