@@ -50,7 +50,7 @@ typedef struct {
 
 typedef struct {
 	char		*typestr;
-	double		computation_power;  wcet
+	double		computation_power;
 	double		power_active, power_idle;	/* not used */
 	unsigned	max_capacity;
 	double		offloading_limit; 
@@ -99,11 +99,11 @@ void add_mem(const char *typestr, unsigned max_capacity, double wcet_scale, doub
 void add_cpufreq(double wcet_scale, double power_active, double power_idle);
 void add_task(unsigned wcet, unsigned period, unsigned memreq, double mem_active_ratio, unsigned task_size, unsigned input_size, unsigned output_size, unsigned offloading_bool);
 void add_offloadingratio(double r); //jennifer
-void add_cloud(const char *typestr, double computation_power, double power_active, double power_idle, unsigned max_capacity, double offloading_limit);  wcet
+void add_cloud(const char *typestr, double computation_power, double power_active, double power_idle, unsigned max_capacity, double offloading_limit);
 void add_network(unsigned uplink, unsigned downlink); 
 void add_net_commander(unsigned intercept_out, unsigned intercept_in); 
 
-void get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud_type, unsigned char cpufreq_type, unsigned char offloadingratio, double *putil, double *ppower_cpu, double *ppower_mem, double *ppower_net_com, double *pdeadline); //gyuri
+void get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud_type, unsigned char cpufreq_type, unsigned char offloadingratio, double *putil, double *ppower_cpu, double *ppower_mem, double *ppower_net_com, double *pdeadline);
 unsigned get_task_memreq(unsigned no_task);
 
 void init_report(void);
