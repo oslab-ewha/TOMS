@@ -1,9 +1,10 @@
-# TOVS (Task Offloading & Voltage Scaling)
-Edge Computing &amp; Voltage Scaling
+# Co-TOMS (Co-optimizing Task Offloading, Memory placement, and voltage Scaling)
 
-This project demonstrates that a GA(genetic algorithm) approach can provide power-efficient scheduling for real-time tasks that makes use of DVS(dynamic voltage scaling) and edge computing. 
+This project performs real-time task scheduling based on steady-state genetic algorithms in order to save power consumptions in CPU, memory, and network subsystems with deadline constraints.
 
-Two executagles included in this project.
+Co-TOMS considers three energy-saving techniques, DVFS (dynamic voltage/frequency scaling), hybrid memory placement, and task offloading to edge servers, across different system layers.
+
+Two executables included in this project, which can simulate Co-TOMS in comparison with DVFS, Offloading, and basic configurations.
 - `gasgen`: task generation tool based on CPU and total utilization
 - `gastask`: scheduling scheme generator based on GA
 
@@ -33,6 +34,24 @@ Just make to build gastask
 
 ## Batch run
 - `run.sh` performs all procedures in batch
-  - Before do `run.sh`, it need `./tmp` folder in root 
+  - Before executing `run.sh`, `./tmp` folder should exist
   - use `run.sh` for mac, use `run2.sh` for window
 
+
+## Data Set
+
+There are two types of data set to perform the simulations of Co-TOMS.
+
+- Synthetic workload: 
+  - [20% CPU Utilization Workload](dataset/synthetic/cpu_20):
+  - [30% CPU Utilization Workload](dataset/synthetic/cpu_30):
+  - [40% CPU Utilization Workload](dataset/synthetic/cpu_40):
+  - [50% CPU Utilization Workload](dataset/synthetic/cpu_50):
+  - [60% CPU Utilization Workload](dataset/synthetic/cpu_60):
+  - [70% CPU Utilization Workload](dataset/synthetic/cpu_70):
+  - [80% CPU Utilization Workload](dataset/synthetic/cpu_80):
+  - [90% CPU Utilization Workload](dataset/synthetic/cpu_90):
+
+- Realistic worload:
+  - [Robotic Highway Safety Marker (RSM)](dataset/realistic/RSM): real-time task set for the actions of mobile robots that carry safety markers in a highway for road construction safety
+  - [IoT](dataset/realistic/IoT): real-time task set for the actions of a controller in industry machine hands
