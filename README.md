@@ -34,8 +34,7 @@ Just make to build gastask
 
 ## Batch run
 - `run.sh` performs all procedures in batch
-  - Before executing `run.sh`, `./tmp` folder should exist
-  - use `run.sh` for mac, use `run2.sh` for window
+  - Before executing run.sh,  ./tmp folder should be generated in root
 
 
 ## Data Set
