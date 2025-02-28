@@ -7,8 +7,8 @@ unsigned	max_gen = 100000;
 
 double		cutoff, penalty;
 
-unsigned	n_clouds; 
-cloud_t  clouds[MAX_CLOUDS]; 
+extern unsigned	n_clouds; 
+extern cloud_t  clouds[MAX_CLOUDS]; 
 
 LIST_HEAD(genes_by_util);
 LIST_HEAD(genes_by_power);

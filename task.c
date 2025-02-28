@@ -3,11 +3,11 @@
 unsigned	n_tasks;
 task_t	tasks[MAX_TASKS];
 
-unsigned	n_networks; 
-network_t  networks[MAX_NETWORKS]; 
+extern unsigned	n_networks; 
+extern network_t  networks[MAX_NETWORKS]; 
 
-unsigned	n_net_commanders; 
-net_commander_t  net_commanders[MAX_NETCOMMANDERS]; 
+extern unsigned	n_net_commanders; 
+extern net_commander_t  net_commanders[MAX_NETCOMMANDERS]; 
 
 void
 get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud_type, unsigned char cpufreq_type, unsigned char offloadingratio, double *putil, double *ppower_cpu, double *ppower_mem, double *ppower_net_com, double *pdeadline)
