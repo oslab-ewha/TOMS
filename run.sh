@@ -88,36 +88,36 @@ mv ./network_commander_generated.txt $OUTPUT/gen_network_commander_generated_$ut
 
 touch $OUTPUT/output_$utilTarget+$networkUp.txt
 echo "*tovs\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
-./gastask -s $seed $gastask_conf >> $OUTPUT/output_$utilTarget+$networkUp.txt
+./gastask -s $seed $gastask_conf | tee -a $OUTPUT/output_$utilTarget+$networkUp.txt
 mv task.txt $OUTPUT/task_$utilTarget+$networkUp+tovs.txt
-sed -i "" "20s/0.5/\#0.5/" $gastask_conf
-sed -i "" "21s/0.25/\#0.25/" $gastask_conf
-sed -i "" "22s/0.125/\#0.125/" $gastask_conf
+sed -i '20s/0.5/#0.5/' $gastask_conf
+sed -i '21s/0.25/#0.25/' $gastask_conf
+sed -i '22s/0.125/#0.125/' $gastask_conf
 
 echo "\n*offloading\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
-./gastask -s $seed $gastask_conf >> $OUTPUT/output_$utilTarget+$networkUp.txt
+./gastask -s $seed $gastask_conf | tee -a $OUTPUT/output_$utilTarget+$networkUp.txt
 mv task.txt $OUTPUT/task_$utilTarget+$networkUp+offloading.txt
 
-sed -i "" "20s/\#0.5/0.5/" $gastask_conf
-sed -i "" "21s/\#0.25/0.25/" $gastask_conf
-sed -i "" "22s/\#0.125/0.125/" $gastask_conf
+sed -i '20s/#0.5/0.5/' $gastask_conf
+sed -i '21s/#0.25/0.25/' $gastask_conf
+sed -i '22s/#0.125/0.125/' $gastask_conf
 
-sed -i "" "36s/1/\#1/" $gastask_conf
+sed -i '36s/1/#1/' $gastask_conf
 
 echo "\n*dvfs\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
-./gastask -s $seed $gastask_conf >> $OUTPUT/output_$utilTarget+$networkUp.txt
+./gastask -s $seed $gastask_conf | tee -a $OUTPUT/output_$utilTarget+$networkUp.txt
 mv task.txt $OUTPUT/task_$utilTarget+$networkUp+dvfs.txt
 
-sed -i "" "20s/0.5/\#0.5/" $gastask_conf
-sed -i "" "21s/0.25/\#0.25/" $gastask_conf
-sed -i "" "22s/0.125/\#0.125/" $gastask_conf
+sed -i '20s/0.5/#0.5/' $gastask_conf
+sed -i '21s/0.25/#0.25/' $gastask_conf
+sed -i '22s/0.125/#0.125/' $gastask_conf
 echo "\n*nothing\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
-./gastask -s $seed $gastask_conf >> $OUTPUT/output_$utilTarget+$networkUp.txt
+./gastask -s $seed $gastask_conf | tee -a $OUTPUT/output_$utilTarget+$networkUp.txt
 mv task.txt $OUTPUT/task_$utilTarget+$networkUp+nothing.txt
 
-sed -i "" "20s/\#0.5/0.5/" $gastask_conf
-sed -i "" "21s/\#0.25/0.25/" $gastask_conf
-sed -i "" "22s/\#0.125/0.125/" $gastask_conf
-sed -i "" "36s/\#1/1/" $gastask_conf
+sed -i '20s/#0.5/0.5/' $gastask_conf
+sed -i '21s/#0.25/0.25/' $gastask_conf
+sed -i '22s/#0.125/0.125/' $gastask_conf
+sed -i '36s/#1/1/' $gastask_conf
 
 mv $gastask_conf $OUTPUT/gastask_$utilTarget+$$.conf

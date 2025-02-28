@@ -71,9 +71,18 @@ Part1 과 Part2의 내용을 자동화 하여 사용한다.
 Uplink 네트워크 속도가 10일때부터 120까지 10 단위로 같은 태스크에 대해 적용된다. 
 1. root 폴더 내부에 tmp 폴더를 생성한다.
 2. `./run.sh` (for mac) 이나 `./run2.sh`(for linux) 를 사용한다. 
-   순서대로 총 Utilization, CPU Utilization, Network Uplink, Network Downlink 의 값을 넣을 수 있다.
+   순서대로 총 Utilization, CPU Utilization, Network Uplink, Network Downlink, Seed의 값을 넣을 수 있다.
    Network Uplink와 downlink의 `10 100` 이 Default 값이다.
 ```
-  # ./run.sh <util> <util cpu> 10 100
+  # ./run.sh <util> <util cpu> 10 100 <seed>
 ```
 3. tmp 폴더 내부에 `output_<util>+<pid>` 폴더에서 각 네트워크 상황별 콘솔 아웃풋 `output_<util>+<network up>.txt`을 확인한다. 각 상황별 테스크 스케줄링을 `task_<util>+<uplink>+<type>.txt`를 확인한다.
+
+## Part 4
+Part3 의 내용을 자동화 하여 반복 실행하고 workload에 따른 power, util, offloading ratio, CPU_Frequency 등의 평균을 출력한다.
+1. repeat_run_avg.sh 파일의 workloads, networkUp, networkDown, seed, iterations, result_file을 세팅한다.
+2. `./repeat_run_avg.sh` 를 사용한다.
+```
+  # ./repeat_run_avg.sh
+```
+3. tmp 폴더에서 result_${networkUp}_${networkDown}_${iterations}.txt를 확인한다. 해당 파일에는 네트워크 상황, workload별 Workload Section Power Util CPU_Power Memory_Power Network_Power Offloading_Ratio CPU_Frequency_1 CPU_Frequency_0.5 CPU_Frequency_0.25 CPU_Frequency_0.125의 평균값이 저장되어있다.
