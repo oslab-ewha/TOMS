@@ -11,9 +11,11 @@ Two executables included in this project, which can simulate Co-TOMS in comparis
 For comparison purposes, our basic simulator supporting dynamic voltage scaling (DVS) and hybrid memory (HM) can be downloaded at https://github.com/oslab-ewha/simrts.
 
 ## Build
-Just make to build gastask
+To build `gastask` and `gasgen`, use CMake:
 ```
-# make
+$ mkdir -p build && cd build
+$ cmake ..
+$ make
 ```
 
 ## Run
