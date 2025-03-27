@@ -87,6 +87,8 @@ parse_conf(FILE *fp)
 		case SECT_OFFLOADINGRATIO: 
 		case SECT_CLOUD:	
 		case SECT_NETWORK: 
+		// TEE
+		case SECT_TEE:
 		case SECT_NET_COMMANDER: 
 			skip_section(fp);
 			break;

@@ -4,6 +4,9 @@ BOOL	verbose;
 
 static int	seed = 0;
 
+// TEE
+unsigned TEE;
+
 static void
 usage(void)
 {

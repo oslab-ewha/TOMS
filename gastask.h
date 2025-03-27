@@ -70,8 +70,6 @@ typedef struct {
 	unsigned    no;
 } net_commander_t;
 
-// TEE
-unsigned TEE;
 
 extern unsigned max_gen;
 extern unsigned	n_tasks;
@@ -81,6 +79,9 @@ extern unsigned n_clouds;
 extern unsigned	n_pops;
 extern unsigned n_networks; 
 extern unsigned n_net_commanders; 
+
+// TEE
+extern unsigned TEE;
 
 extern struct list_head	genes_by_util;
 extern struct list_head	genes_by_power;
