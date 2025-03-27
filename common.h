@@ -35,7 +35,9 @@ typedef enum {
 	SECT_CLOUD, 
 	SECT_OFFLOADINGRATIO, 
 	SECT_NETWORK, 
-	SECT_NET_COMMANDER  	
+	SECT_NET_COMMANDER,
+	// TEE
+	SECT_TEE 	
 } section_t;
 
 typedef struct {

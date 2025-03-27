@@ -70,6 +70,9 @@ typedef struct {
 	unsigned    no;
 } net_commander_t;
 
+// TEE
+unsigned TEE;
+
 extern unsigned max_gen;
 extern unsigned	n_tasks;
 extern unsigned	n_cpufreqs;

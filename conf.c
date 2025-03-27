@@ -46,6 +46,9 @@ check_section(const char *line)
 		return SECT_NETWORK;
 	if(strncmp(line + 1, "netcommander", 12) == 0) 
 		return SECT_NET_COMMANDER;
+	// TEE
+	if(strncmp(line + 1, "TEE", 3) == 0)
+		return SECT_TEE;
 	return SECT_UNKNOWN;
 }
 

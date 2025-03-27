@@ -180,6 +180,37 @@ parse_offloadingratio(FILE *fp)
 	}
 }
 
+static void
+parse_TEE(FILE *fp)
+{
+    char buf[1024];
+    unsigned val;
+
+    while (fgets(buf, 1024, fp)) {
+        if (buf[0] == '#')
+            continue;
+
+        if (buf[0] == '\n' || buf[0] == '*') {
+            fseek(fp, -1 * strlen(buf), SEEK_CUR);
+            return;
+        }
+
+        if (sscanf(buf, "%u", &val) != 1) {
+            FATAL(2, "cannot load configuration: invalid TEE value: %s", trim(buf));
+        }
+
+        if (val != 0 && val != 1) {
+            FATAL(2, "TEE value must be either 0 or 1: %s", trim(buf));
+        }
+
+        TEE = val;  
+        return;     // read only one line
+    }
+}
+
+
+
+
 void
 parse_conf(FILE *fp)
 {
@@ -220,6 +251,10 @@ parse_conf(FILE *fp)
 			break;
 		case SECT_NET_COMMANDER: 
 			parse_net_commander(fp);
+			break;
+		// TEE
+		case SECT_TEE:
+			parse_TEE(fp);
 			break;
 		default:
 			errmsg("unknown section: %s", trim(buf));
