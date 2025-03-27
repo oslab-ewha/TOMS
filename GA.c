@@ -261,6 +261,53 @@ check_utilpower(gene_t *gene)
 	return FALSE;
 }
 
+
+// TEE
+BOOL
+check_utilpower_TEE(gene_t *gene)
+{
+	double	util_new = 0, power_new, power_new_sum_cpu = 0, power_new_sum_mem = 0, power_new_idle = 0, power_new_sum_net_com = 0;
+
+	int	i, violate_period = 0, num_offloading = 0; 
+	// int violate_offloading = 0; 
+
+	for (i = 0; i < n_tasks; i++) {
+		double	task_util, task_power_cpu, task_power_mem, task_power_net_com, task_deadline;
+		
+		get_task_utilpower_TEE(i, gene->taskattrs_mem.attrs[i], gene->taskattrs_cloud.attrs[i], gene->taskattrs_cpufreq.attrs[i], gene->taskattrs_offloadingratio.attrs[i],
+				   &task_util, &task_power_cpu, &task_power_mem, &task_power_net_com, &task_deadline); 
+		util_new += task_util;
+		power_new_sum_cpu += task_power_cpu;
+		power_new_sum_mem += task_power_mem;
+		power_new_sum_net_com += task_power_net_com;
+		if(task_deadline > 1.0) 
+			violate_period ++;
+		if((unsigned)gene->taskattrs_offloadingratio.attrs[i] != 0)
+			num_offloading++;
+	}
+	
+	power_new = power_new_sum_cpu + power_new_sum_mem + power_new_sum_net_com; //ADDMEM
+	gene->cpu_power = power_new_sum_cpu;
+	gene->mem_power = power_new_sum_mem;
+	gene->power_netcom = power_new_sum_net_com;
+	// power_new = power_new_sum_cpu + power_new_sum_net_com; 
+	gene->period_violation = violate_period;
+	if (util_new < 1.0 && violate_period == 0) { 
+		power_new_idle = cpufreqs[n_cpufreqs - 1].power_idle * (1 - util_new); 
+		power_new += power_new_idle;
+		gene->cpu_power += power_new_idle;
+	}
+	gene->util = util_new;
+	if (util_new <= cutoff) {
+		gene->power = power_new;
+		gene->score = power_new;
+		if (util_new >= 1.0 || violate_period > 0) 
+			gene->score += power_new * (util_new - 1.0) * penalty;
+		return TRUE;
+	}
+	return FALSE;
+}
+
 static void
 init_gene(gene_t *gene)
 {
@@ -280,11 +327,22 @@ init_gene(gene_t *gene)
 			balance_mem_types(gene);
 			continue;
 		}
-		
-		if (check_utilpower(gene)) {
-			sort_gene(gene);
-			return;
+
+		// TEE
+		if(TEE){
+			if (check_utilpower_TEE(gene)) {
+				sort_gene(gene);
+				return;
+			}
 		}
+
+		else{
+			if (check_utilpower(gene)) {
+				sort_gene(gene);
+				return;
+			}
+		}
+		
 		lower_utilization(gene);
 	}
 
@@ -324,8 +382,16 @@ do_crossover(gene_t *newborn, gene_t *gene1, gene_t *gene2, unsigned crosspt_rat
 	
 	if (!check_memusage(newborn))
 		return FALSE;
-	if (!check_utilpower(newborn))
+	// TEE
+	if(TEE){
+		if (!check_utilpower_TEE(newborn))
 		return FALSE;
+	}
+	else{
+		if (!check_utilpower(newborn))
+		return FALSE;
+	}
+	
 	if (newborn->score > gene1->score || newborn->score > gene2->score)
 		return FALSE;
 	sort_gene(newborn);
