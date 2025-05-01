@@ -97,7 +97,7 @@ save_task_infos(void)
 	fclose(fp);
 	
 	printf("power: %.6lf util: %.6lf\n", gene->power, gene->util);
-	printf("cpu power: %.6lf memory power: %.6lf network power: %.6lf\n", gene->cpu_power, gene->mem_power, gene->power_netcom); 
+	printf("cpu power: %.6lf memory power: %.6lf(static: %6lf) network power: %.6lf\n", gene->cpu_power, gene->mem_power, gene->mem_power_static, gene->power_netcom); 
 	printf("offloading ratio: %.6lf\n", n_offloading/(double)n_tasks); 
 	printf("cpu frequency: \n1\t0.5\t0.25\t0.125 \n"); 
 	printf("%d\t%d\t%d\t%d \n", cpufreq0, cpufreq1, cpufreq2, cpufreq3); 

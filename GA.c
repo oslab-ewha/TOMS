@@ -210,20 +210,22 @@ lower_utilization(gene_t *gene)
 BOOL
 check_utilpower(gene_t *gene)
 {
-	double	util_new = 0, power_new, power_new_sum_cpu = 0, power_new_sum_mem = 0, power_new_idle = 0, power_new_sum_net_com = 0;
+	double	util_new = 0, power_new, power_new_sum_cpu = 0, power_new_sum_mem = 0, power_new_sum_mem_static = 0, power_new_idle = 0, power_new_sum_net_com = 0;
 
 	int	i, violate_period = 0, num_offloading = 0; 
 	// int violate_offloading = 0; 
 
 	for (i = 0; i < n_tasks; i++) {
-		double	task_util, task_power_cpu, task_power_mem, task_power_net_com, task_deadline;
+		double	task_util, task_power_cpu, task_power_mem_static, task_power_mem_dyn, task_power_net_com, task_deadline;
 		
 		get_task_utilpower(i, gene->taskattrs_mem.attrs[i], gene->taskattrs_cloud.attrs[i], gene->taskattrs_cpufreq.attrs[i], gene->taskattrs_offloadingratio.attrs[i],
-				   &task_util, &task_power_cpu, &task_power_mem, &task_power_net_com, &task_deadline); //gyuri
+				   &task_util, &task_power_cpu, &task_power_mem_static, &task_power_mem_dyn, &task_power_net_com, &task_deadline); //gyuri
 		util_new += task_util;
 		power_new_sum_cpu += task_power_cpu;
-		power_new_sum_mem += task_power_mem;
-		power_new_sum_net_com += task_power_net_com;
+		power_new_sum_mem += (task_power_mem_static + task_power_mem_dyn);
+		power_new_sum_mem_static += task_power_mem_static;
+		if (!isnan(task_power_net_com))
+			power_new_sum_net_com += task_power_net_com;
 		if(task_deadline > 1.0) 
 			violate_period ++;
 		if((unsigned)gene->taskattrs_offloadingratio.attrs[i] != 0)
@@ -242,6 +244,7 @@ check_utilpower(gene_t *gene)
 	power_new = power_new_sum_cpu + power_new_sum_mem + power_new_sum_net_com; //ADDMEM
 	gene->cpu_power = power_new_sum_cpu;
 	gene->mem_power = power_new_sum_mem;
+	gene->mem_power_static = power_new_sum_mem_static;
 	gene->power_netcom = power_new_sum_net_com;
 	// power_new = power_new_sum_cpu + power_new_sum_net_com; 
 	gene->period_violation = violate_period;

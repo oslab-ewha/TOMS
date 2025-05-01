@@ -23,7 +23,7 @@ typedef struct {
 	taskattrs_t taskattrs_cloud; 
 	taskattrs_t	taskattrs_cpufreq;
 	taskattrs_t	taskattrs_offloadingratio; 
-	double		util, power, score, mem_power, cpu_power, power_netcom; 
+	double		util, power, score, mem_power, mem_power_static, cpu_power, power_netcom; 
 	unsigned 	period_violation; 
 	struct list_head	list_util;
 	struct list_head	list_power;
@@ -103,7 +103,7 @@ void add_cloud(const char *typestr, double computation_power, double power_activ
 void add_network(unsigned uplink, unsigned downlink); 
 void add_net_commander(unsigned intercept_out, unsigned intercept_in); 
 
-void get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud_type, unsigned char cpufreq_type, unsigned char offloadingratio, double *putil, double *ppower_cpu, double *ppower_mem, double *ppower_net_com, double *pdeadline);
+void get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud_type, unsigned char cpufreq_type, unsigned char offloadingratio, double *putil, double *ppower_cpu, double *ppower_mem_static, double *ppower_mem_dyn, double *ppower_net_com, double *pdeadline);
 unsigned get_task_memreq(unsigned no_task);
 
 void init_report(void);

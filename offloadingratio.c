@@ -12,6 +12,6 @@ add_offloadingratio(double r)
     if(n_offloadingratios > 0 && offloadingratios[n_offloadingratios - 1] > r)
         FATAL(2, "offloading ratio should be defined in increasing order");
 	
-	n_offloadingratios++;
+    n_offloadingratios++;
     offloadingratios[n_offloadingratios - 1] = r;
 }

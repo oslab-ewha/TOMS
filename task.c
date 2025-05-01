@@ -10,7 +10,7 @@ extern unsigned	n_net_commanders;
 extern net_commander_t  net_commanders[MAX_NETCOMMANDERS]; 
 
 void
-get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud_type, unsigned char cpufreq_type, unsigned char offloadingratio, double *putil, double *ppower_cpu, double *ppower_mem, double *ppower_net_com, double *pdeadline)
+get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud_type, unsigned char cpufreq_type, unsigned char offloadingratio, double *putil, double *ppower_cpu, double *ppower_mem_static, double *ppower_mem_dyn, double *ppower_net_com, double *pdeadline)
 {
 	task_t	*task = tasks + no_task;
 	mem_t	*mem = mems + mem_type;
@@ -39,8 +39,8 @@ get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud
 	cpu_power_unit = (cpufreq->power_active * wcet_scaled_cpu + cpufreq->power_idle * wcet_scaled_mem) / (wcet_scaled_cpu + wcet_scaled_mem);
 	*ppower_cpu = cpu_power_unit * (wcet_scaled / task->period) * (1 - offloadingratios[offloadingratio]) + cpu_power_unit * (netcomtime / task->period) * (offloadingratios[offloadingratio]); 
 	*ppower_net_com = net_com_power_unit * ((transtime + netcomtime) / task->period) * offloadingratios[offloadingratio];  
-	*ppower_mem = (task->memreq * (task->mem_active_ratio * mem->power_active + (1 - task->mem_active_ratio) * mem->power_idle) * wcet_scaled / task->period +
-		task->memreq * mem->power_idle * (1 - wcet_scaled / task->period));
+	*ppower_mem_static = task->memreq * mem->power_idle * (1 - wcet_scaled / task->period);
+	*ppower_mem_dyn = task->memreq * (task->mem_active_ratio * mem->power_active + (1 - task->mem_active_ratio) * mem->power_idle) * wcet_scaled / task->period;
 }
 
 unsigned
