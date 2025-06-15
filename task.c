@@ -90,8 +90,11 @@ void get_task_utilpower_TEE(unsigned no_task, unsigned char mem_type, unsigned c
 	cpu_power_unit = (cpufreq->power_active * wcet_scaled_cpu + cpufreq->power_idle * wcet_scaled_mem) / (wcet_scaled_cpu + wcet_scaled_mem);
 	
 	// Power
-	*ppower_cpu = cpu_power_unit * (wcet_scaled / task->period) * (1 - offloadingratios[offloadingratio]) + cpu_power_unit * (netcomtime / task->period) * (offloadingratios[offloadingratio]);
+	*ppower_cpu = cpu_power_unit * (wcet_scaled / task->period) * (1 - offloadingratios[offloadingratio]) 
+				+ cpu_power_unit * (netcomtime / task->period) * (offloadingratios[offloadingratio]);
+
 	*ppower_net_com = net_com_power_unit * ((transtime + netcomtime) / task->period) * offloadingratios[offloadingratio];
+	
 	*ppower_mem = (task->memreq * (task->mem_active_ratio * mem->power_active + (1 - task->mem_active_ratio) * mem->power_idle) * wcet_scaled / task->period +
 				   task->memreq * mem->power_idle * (1 - wcet_scaled / task->period));
 }
