@@ -1,3 +1,13 @@
+/*
+ * conf.c
+ * Implements configuration file parsing for the TOMS system.
+ *
+ * Provides:
+ *   - Utility functions for trimming whitespace and identifying configuration sections
+ *   - Functions to skip or parse specific sections (e.g., memory)
+ *   - Main entry point to load and process the configuration file
+ */
+
 #include "gastask.h"
 
 char *

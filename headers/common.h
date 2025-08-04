@@ -1,3 +1,7 @@
+/* common.h
+*  Contains definitions, macros, and function prototypes used across multiple files
+*/
+
 #ifndef _COMMON_H_
 #define _COMMON_H_
 

@@ -1,3 +1,23 @@
+# gastask.conf.tmpl
+# Template configuration file for the TOMS system.
+# 
+# Sections:
+#   *genetic         - Genetic algorithm parameters (max_generations, n_populations, cutoff, penalty)
+#   *gentask         - Task generation parameters (ranges for wcet, memory, utilization, etc.)
+#   *gennetwork      - Network generation parameters (uplink/downlink ranges, number of networks)
+#   *gennetcommander - Net commander generation parameters (intercept ranges, number of commanders)
+#   *cpufreq         - CPU frequency settings (scale, power_active, power_idle)
+#   *mem             - Memory type settings (type, max_capacity, scale, power)
+#   *cloud           - Cloud resource settings (type, computation_power, power, capacity, offloading_limit)
+#   *offloadingratio - Offloading ratio options
+#   *TEE             - Trusted Execution Environment options
+#   *network         - Network settings (uplink/downlink rates)
+#   *netcommander    - Net commander settings (intercept values)
+#   *task            - Task list (wcet, period, memreq, mem_active_ratio, task_size, input_size, output_size, offloading_bool)
+#
+# Each section is preceded by a comment describing the order and meaning of its fields.
+
+
 # max_generations n_populations cutoff penalty
 *genetic
 100000 100 1.1 1.5
@@ -52,10 +72,10 @@ mec  2   400   100   100000   1.0
 4 3
 1 4
 
-# wcet period memreq mem_active_ratio
+# wcet period memreq mem_active_ratio task_size input_size output_size offloading_bool
 *task
-10 30   200 0.1
-10 20   20  0.05
- 1 20   20  0.1
+556 80718 12 0.111700 4349 2747 1292 1
+614 76162 14 0.108000 4469 3032 1312 1
+220 32524 9 0.136300 5388 1000 1529 0
 
 

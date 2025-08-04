@@ -1,3 +1,14 @@
+/*
+ * GA.c
+ * Implements the core genetic algorithm (GA) for resource assignment and optimization in the TOMS system.
+ *
+ * Provides:
+ *   - Population and gene initialization, crossover, and selection logic
+ *   - Fitness evaluation based on utilization, power, and constraints (including TEE support)
+ *   - Main entry point: run_GA(), which executes the GA loop and manages reporting
+ *   - Utility functions for gene sorting, mutation, and constraint checking
+ */
+
 #include "gastask.h"
 
 #define MAX_TRY	10000

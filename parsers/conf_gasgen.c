@@ -1,3 +1,15 @@
+/*
+ * conf_gasgen.c
+ * Parses configuration files for the gasgen module in the TOMS system.
+ *
+ * Provides:
+ *   - parse_conf(): Main entry point to parse the configuration file and dispatch section handlers
+ *   - parse_gentask(): Parses task generation parameters
+ *   - parse_gennetwork(): Parses network generation parameters
+ *   - parse_gennetcommander(): Parses net commander generation parameters
+ *   - Delegates parsing or skipping of other sections as needed
+ */
+
 #include "gastask.h"
 
 extern unsigned	wcet_min, wcet_max, mem_total;

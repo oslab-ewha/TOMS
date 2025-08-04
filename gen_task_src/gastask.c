@@ -1,3 +1,14 @@
+/*
+ * gastask.c
+ * Entry point for the gastask module in the TOMS system.
+ *
+ * Provides:
+ *   - Command-line interface for running the genetic algorithm using a configuration file
+ *   - Argument parsing and usage/help display
+ *   - Error message handling
+ *   - Main function that loads configuration, initializes random seed, and runs the genetic algorithm
+ */
+
 #include "gastask.h"
 
 BOOL	verbose;

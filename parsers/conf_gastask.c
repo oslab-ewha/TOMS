@@ -1,3 +1,21 @@
+/*
+ * conf_gastask.c
+ * Parses configuration files for the gastask module in the TOMS system.
+ *
+ * Provides:
+ *   - parse_conf(): Main entry point to parse the configuration file and dispatch section handlers
+ *   - parse_genetic(): Parses genetic algorithm parameters
+ *   - parse_cpufreq(): Parses CPU frequency settings
+ *   - parse_mem(): Parses memory type settings
+ *   - parse_task(): Parses task list and attributes
+ *   - parse_offloadingratio(): Parses offloading ratio options
+ *   - parse_cloud(): Parses cloud resource settings
+ *   - parse_network(): Parses network settings
+ *   - parse_net_commander(): Parses net commander settings
+ *   - parse_TEE(): Parses Trusted Execution Environment option
+ *   - skip_section(): Skips irrelevant or generation-only sections
+ */
+
 #include "gastask.h"
 
 static void

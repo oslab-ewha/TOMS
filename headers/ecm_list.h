@@ -1,15 +1,16 @@
-﻿#ifndef _ECM_LIST_H_
-#define _ECM_LIST_H_
-
-/*
- * Simple doubly linked list implementation.
+﻿/* ecm_list.h
+ *  Simple doubly linked list implementation.
  *
  * Some of the internal functions ("__xxx") are useful when
  * manipulating whole lists rather than single entries, as
  * sometimes we already know the next/prev entries and we can
  * generate better code by using them directly rather than
  * using the generic single-entry routines.
- */
+*/
+
+#ifndef _ECM_LIST_H_
+#define _ECM_LIST_H_
+
 
 struct list_head {
 	struct list_head	*next, *prev;

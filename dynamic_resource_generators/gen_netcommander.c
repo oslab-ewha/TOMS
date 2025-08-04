@@ -1,3 +1,13 @@
+/*
+ * gen_netcommander.c
+ * Generates random net commander intercept values for the gasgen module.
+ *
+ * Provides:
+ *   - do_gen_net_commander(): Generates a single pair of intercept_out and intercept_in values within configured ranges and writes to file
+ *   - gen_net_commander(): Generates multiple net commander entries and writes them to "network_commander_generated.txt"
+ *   - Uses global configuration variables for intercept ranges and target count
+ */
+
 #include "gasgen.h" 
 
 unsigned intercept_out_min, intercept_out_max, intercept_in_min, intercept_in_max;

@@ -1,3 +1,8 @@
+/* cloud.c
+*  Manages cloud resource types: 
+*  defines data structures and provides functions to register, store, and access properties (such as type, computation power, power usage, capacity, and offloading limits) for each cloud type used
+*/ 
+
 #include "gastask.h" 
 
 cloud_t	clouds[MAX_CLOUDS];

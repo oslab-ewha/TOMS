@@ -1,3 +1,14 @@
+/*
+ * report.c
+ * Handles reporting and logging of genetic algorithm results for the TOMS system.
+ *
+ * Provides:
+ *   - add_report(): Collects and writes summary statistics (power/utilization) for each generation
+ *   - save_task_infos(): Saves detailed task attribute assignments for the best gene
+ *   - init_report(): Initializes the report file and writes headers
+ *   - close_report(): Closes the report file and saves final task information
+ */
+
 #include "gastask.h"
 
 #define N_REPORTS	1000

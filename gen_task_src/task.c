@@ -1,3 +1,16 @@
+/*
+ * task.c
+ * Manages the list of tasks and provides utility functions for task analysis in the TOMS system.
+ *
+ * Provides:
+ *   - tasks: Array storing all task entries
+ *   - n_tasks: Number of registered tasks
+ *   - add_task(): Adds a new task with specified attributes
+ *   - get_task_utilpower(): Calculates utilization and power consumption for a task under given resource assignments
+ *   - get_task_utilpower_TEE(): Calculates utilization and power for a task considering Trusted Execution Environment (TEE) overheads
+ *   - get_task_memreq(): Returns the memory requirement for a given task
+ */
+
 #include "gastask.h"
 
 unsigned	n_tasks;

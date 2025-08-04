@@ -1,3 +1,14 @@
+/*
+ * gasgen.c
+ * Entry point for the gasgen module in the TOMS system.
+ *
+ * Provides:
+ *   - Command-line interface for generating tasks, networks, and net commanders based on a configuration file
+ *   - Argument parsing and usage/help display
+ *   - Error message handling
+ *   - Main function that loads configuration and triggers resource generation routines
+ */
+
 #include "gasgen.h"
 
 BOOL	verbose;

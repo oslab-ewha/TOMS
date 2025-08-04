@@ -1,3 +1,13 @@
+/* gastask.h
+ * Common header for the gastask module.
+ * 
+ * Defines:
+ *   - Constants: MAX_TASKS, MAX_NETWORKS, MAX_CPU_FREQS, MAX_MEMS, MAX_NETCOMMANDERS,
+ *                MAX_OFFLOADING_RATIOS, MAX_CLOUDS, MAX_ATTRTYPES
+ *   - Data structures: taskattrs_t, gene_t, task_t, cpufreq_t, cloud_t, network_t, net_commander_t
+ *   - Extern variables: max_gen, n_tasks, n_cpufreqs, n_offloadingratios, n_clouds, n_pops, n_networks, n_net_commanders, TEE, etc.
+ *   - Function prototypes: add_mem, add_cpufreq, add_task, add_offloadingratio, add_cloud, add_network, add_net_commander, get_task_utilpower, get_task_memreq, init_report, close_report, add_report, run_GA
+ */
 #ifndef _GASTASK_H_
 #define _GASTASK_H_
 

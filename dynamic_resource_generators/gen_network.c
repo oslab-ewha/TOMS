@@ -1,3 +1,13 @@
+/*
+ * gen_network.c
+ * Generates random network uplink and downlink values for the gasgen module.
+ *
+ * Provides:
+ *   - do_gen_network(): Generates a single network entry with random uplink and downlink values within configured ranges and writes to file
+ *   - gen_network(): Generates multiple network entries and writes them to "network_generated.txt"
+ *   - Uses global configuration variables for uplink/downlink ranges and target count
+ */
+
 #include "gasgen.h" 
 
 unsigned uplink_min, uplink_max, downlink_min, downlink_max;

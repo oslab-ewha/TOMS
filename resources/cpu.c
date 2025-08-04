@@ -1,3 +1,13 @@
+/*
+ * cpu.c
+ * Implements CPU frequency resources for the system.
+ * 
+ * Defines and manages:
+ *   - cpufreqs: array storing available CPU frequencies and their power characteristics
+ *   - n_cpufreqs: number of registered CPU frequencies
+ *   - add_cpufreq(): function to add a new CPU frequency with its properties
+ */
+
 #include "gastask.h"
 
 cpufreq_t	cpufreqs[MAX_CPU_FREQS];

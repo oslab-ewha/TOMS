@@ -1,3 +1,13 @@
+/*
+ * offloadingratio.c
+ * Manages the list of available offloading ratios for cloud resources.
+ *
+ * Provides:
+ *   - offloadingratios: Array storing valid offloading ratio values
+ *   - n_offloadingratios: Number of registered offloading ratios
+ *   - add_offloadingratio(): Adds a new offloading ratio, ensuring order and capacity constraints
+ */
+
 #include "gastask.h" 
 
 double	offloadingratios[MAX_OFFLOADING_RATIOS];

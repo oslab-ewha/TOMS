@@ -1,3 +1,7 @@
+/* gasgen.h
+*  Header for task and network generation functions used by the gasgen module.
+*/
+
 #ifndef _GASGEN_H_
 #define _GASGEN_H_
 
