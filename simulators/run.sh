@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function usage() {
     cat <<EOF
 Usage: run_batch.sh <util> <util cpu> <network_up> <network_down> <seed>
@@ -10,7 +12,6 @@ if [ $# -lt 3 ]; then
 fi
 
 GASTASK=`./gastask`
-
 GASGEN=`./gasgen`
 
 utilTarget=$1
@@ -19,10 +20,17 @@ networkUp=$3
 networkDown=$4
 seed=$5
 
-gastask_conf=./tmp/gastask_$utilTarget+$$.conf
+# tmp 디렉토리 생성
+mkdir -p ./tmp
 
-
-COMMON_CONF="\
+# 기본 설정 생성 함수
+create_base_config() {
+    local config_file=$1
+    local tee_enabled=$2
+    local offloading_enabled=$3
+    local dvfs_enabled=$4
+    
+    cat > $config_file << EOF
 # max_generations n_populations cutoff penalty
 *genetic
 10000 100 1.5 1.5
@@ -41,10 +49,22 @@ $networkUp $networkUp $networkDown $networkDown 100
 
 # wcet_scale power_active power_idle
 *cpufreq
+EOF
+
+    if [ "$dvfs_enabled" = "true" ]; then
+        cat >> $config_file << EOF
 1    100    1
 0.5  25   0.25
 0.25 6.25 0.0625
 0.125 1.5625 0.015625
+EOF
+    else
+        cat >> $config_file << EOF
+1    100    1
+EOF
+    fi
+
+    cat >> $config_file << EOF
 
 # type max_capacity wcet_scale power_active power_idle
 *mem
@@ -57,67 +77,104 @@ mec  2   400   100   100000   1.0
 
 # offloading_ratio 
 *offloadingratio
-0
-1
-
-# uplink_data_rate downlink_data_rate
-*network"
-
-echo "$COMMON_CONF" <<EOF >$gastask_conf
 EOF
 
-'./gasgen' $gastask_conf
-cat ./network_generated.txt >>$gastask_conf
+    if [ "$offloading_enabled" = "true" ]; then
+        cat >> $config_file << EOF
+0
+1
+EOF
+    else
+        cat >> $config_file << EOF
+0
+EOF
+    fi
 
-echo "
+    cat >> $config_file << EOF
+
+# TEE 
+*TEE
+$tee_enabled
+
+# uplink_data_rate downlink_data_rate
+*network
+EOF
+
+    # gasgen을 실행하여 네트워크 및 태스크 생성
+    ./gasgen $config_file
+    cat ./network_generated.txt >> $config_file
+
+    cat >> $config_file << EOF
+
 # intercept_out intercept_in
-*netcommander" >>$gastask_conf
+*netcommander
+EOF
+    cat ./network_commander_generated.txt >> $config_file
 
-cat ./network_commander_generated.txt >>$gastask_conf
+    cat >> $config_file << EOF
 
-echo "
-# wcet period memreq mem_active_ratio input_data_size output_data_size
-*task" >>$gastask_conf
+# wcet period memreq mem_active_ratio task_size input_size output_size offloading_bool
+*task
+EOF
+    cat ./task_generated.txt >> $config_file
+}
 
-cat ./task_generated.txt >>$gastask_conf
-
-mkdir ./tmp/output_$utilTarget+$$
+# 출력 디렉토리 생성
 OUTPUT=./tmp/output_$utilTarget+$$
-mv ./task_generated.txt $OUTPUT/gen_task_generated_$utilTarget+$$.txt
-mv ./network_commander_generated.txt $OUTPUT/gen_network_commander_generated_$utilTarget+$$.txt
-
+mkdir -p $OUTPUT
+mkdir -p $OUTPUT/conf
+mkdir -p $OUTPUT/gen
+mkdir -p $OUTPUT/report
+mkdir -p $OUTPUT/task
 touch $OUTPUT/output_$utilTarget+$networkUp.txt
-echo "*tovs\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
-./gastask -s $seed $gastask_conf | tee -a $OUTPUT/output_$utilTarget+$networkUp.txt
-mv task.txt $OUTPUT/task_$utilTarget+$networkUp+tovs.txt
-sed -i '20s/0.5/#0.5/' $gastask_conf
-sed -i '21s/0.25/#0.25/' $gastask_conf
-sed -i '22s/0.125/#0.125/' $gastask_conf
 
-echo "\n*offloading\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
-./gastask -s $seed $gastask_conf | tee -a $OUTPUT/output_$utilTarget+$networkUp.txt
-mv task.txt $OUTPUT/task_$utilTarget+$networkUp+offloading.txt
+# 1. CO-DMO-CT (TEE=1, All optimizations enabled)
+echo "*CO-DMO-CT" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+gastask_conf_1=$OUTPUT/conf/gastask_co-dmo-ct_$utilTarget+$$.conf
+create_base_config $gastask_conf_1 1 true true
+./gastask -s $seed $gastask_conf_1 | tee -a $OUTPUT/output_$utilTarget+$networkUp.txt
+mv task.txt $OUTPUT/task/task_$utilTarget+$networkUp+co-dmo-ct.txt
+mv report.txt $OUTPUT/report/report_$utilTarget+$networkUp+co-dmo-ct.txt 2>/dev/null || true
 
-sed -i '20s/#0.5/0.5/' $gastask_conf
-sed -i '21s/#0.25/0.25/' $gastask_conf
-sed -i '22s/#0.125/0.125/' $gastask_conf
+# 2. CO-DMO (TEE=0, All optimizations enabled)
+echo "" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+echo "*CO-DMO" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+gastask_conf_2=$OUTPUT/conf/gastask_co-dmo_$utilTarget+$$.conf
+create_base_config $gastask_conf_2 0 true true
+./gastask -s $seed $gastask_conf_2 | tee -a $OUTPUT/output_$utilTarget+$networkUp.txt
+mv task.txt $OUTPUT/task/task_$utilTarget+$networkUp+co-dmo.txt
+mv report.txt $OUTPUT/report/report_$utilTarget+$networkUp+co-dmo.txt 2>/dev/null || true
 
-sed -i '36s/1/#1/' $gastask_conf
+# 3. Offloading (TEE=0, Only offloading)
+echo "" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+echo "*Offloading" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+gastask_conf_3=$OUTPUT/conf/gastask_offloading_$utilTarget+$$.conf
+create_base_config $gastask_conf_3 0 true false
+./gastask -s $seed $gastask_conf_3 | tee -a $OUTPUT/output_$utilTarget+$networkUp.txt
+mv task.txt $OUTPUT/task/task_$utilTarget+$networkUp+offloading.txt
+mv report.txt $OUTPUT/report/report_$utilTarget+$networkUp+offloading.txt 2>/dev/null || true
 
-echo "\n*dvfs\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
-./gastask -s $seed $gastask_conf | tee -a $OUTPUT/output_$utilTarget+$networkUp.txt
-mv task.txt $OUTPUT/task_$utilTarget+$networkUp+dvfs.txt
+# 4. DVS (TEE=0, Only DVFS)
+echo "" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+echo "*DVS" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+gastask_conf_4=$OUTPUT/conf/gastask_dvs_$utilTarget+$$.conf
+create_base_config $gastask_conf_4 0 false true
+./gastask -s $seed $gastask_conf_4 | tee -a $OUTPUT/output_$utilTarget+$networkUp.txt
+mv task.txt $OUTPUT/task/task_$utilTarget+$networkUp+dvs.txt
+mv report.txt $OUTPUT/report/report_$utilTarget+$networkUp+dvs.txt 2>/dev/null || true
 
-sed -i '20s/0.5/#0.5/' $gastask_conf
-sed -i '21s/0.25/#0.25/' $gastask_conf
-sed -i '22s/0.125/#0.125/' $gastask_conf
-echo "\n*nothing\n" >> $OUTPUT/output_$utilTarget+$networkUp.txt
-./gastask -s $seed $gastask_conf | tee -a $OUTPUT/output_$utilTarget+$networkUp.txt
-mv task.txt $OUTPUT/task_$utilTarget+$networkUp+nothing.txt
+# 5. Baseline (TEE=0, No optimizations)
+echo "" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+echo "*Baseline" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+gastask_conf_5=$OUTPUT/conf/gastask_baseline_$utilTarget+$$.conf
+create_base_config $gastask_conf_5 0 false false
+./gastask -s $seed $gastask_conf_5 | tee -a $OUTPUT/output_$utilTarget+$networkUp.txt
+mv task.txt $OUTPUT/task/task_$utilTarget+$networkUp+baseline.txt
+mv report.txt $OUTPUT/report/report_$utilTarget+$networkUp+baseline.txt 2>/dev/null || true
 
-sed -i '20s/#0.5/0.5/' $gastask_conf
-sed -i '21s/#0.25/0.25/' $gastask_conf
-sed -i '22s/#0.125/0.125/' $gastask_conf
-sed -i '36s/#1/1/' $gastask_conf
+# 정리
+mv ./task_generated.txt $OUTPUT/gen/gen_task_generated_$utilTarget+$$.txt 2>/dev/null || true
+mv ./network_commander_generated.txt $OUTPUT/gen/gen_network_commander_generated_$utilTarget+$$.txt 2>/dev/null || true
+mv ./network_generated.txt $OUTPUT/gen/gen_network_generated_$utilTarget+$$.txt 2>/dev/null || true
 
-mv $gastask_conf $OUTPUT/gastask_$utilTarget+$$.conf
+echo "Simulation completed. Results saved in $OUTPUT"

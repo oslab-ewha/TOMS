@@ -1,0 +1,49 @@
+*CO-DMO-CT
+initial utilization: 0.844324
+power: 6.576415 util: 0.626454
+cpu power: 1.164439 memory power: 2.054716 network power: 3.357260
+offloading ratio: 0.820000
+cpu frequency: 
+1	0.5	0.25	0.125 
+8	24	33	35 
+period violation: 0
+
+*CO-DMO
+initial utilization: 0.835939
+power: 6.658986 util: 0.822545
+cpu power: 1.610247 memory power: 1.949343 network power: 3.099396
+offloading ratio: 0.750000
+cpu frequency: 
+1	0.5	0.25	0.125 
+14	22	27	37 
+period violation: 0
+
+*Offloading
+initial utilization: 0.223822
+power: 9.422847 util: 0.056790
+cpu power: 3.593995 memory power: 2.437280 network power: 3.391573
+offloading ratio: 0.880000
+cpu frequency: 
+1	0.5	0.25	0.125 
+100	0	0	0 
+period violation: 0
+
+*DVS
+initial utilization: 1.483710
+power: 18.430454 util: 1.000131
+cpu power: 15.235007 memory power: 3.195447 network power: 0.000000
+offloading ratio: 0.000000
+cpu frequency: 
+1	0.5	0.25	0.125 
+31	43	24	2 
+period violation: 0
+
+*Baseline
+initial utilization: 0.450930
+power: 24.216909 util: 0.486702
+cpu power: 22.733326 memory power: 1.483583 network power: 0.000000
+offloading ratio: 0.000000
+cpu frequency: 
+1	0.5	0.25	0.125 
+100	0	0	0 
+period violation: 0
