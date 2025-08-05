@@ -1,8 +1,25 @@
 #!/bin/bash
+# run.sh 
+# Description:
+# This script automates the simulation of various optimization strategies 
+# for real-time task execution in Industrial IoT (IIoT) environments. 
+# It generates configurations, executes simulations, and organizes results 
+# for different scenarios, including CO-DMO-CT, CO-DMO, Offloading, DVS, 
+# and Baseline.
+#
+# Usage:
+# ./run.sh <util> <util cpu> <network_up> <network_down> <seed>
+#
+# Parameters:
+# <util>          - Target utilization for the simulation.
+# <util cpu>      - CPU utilization for the simulation.
+# <network_up>    - Uplink network bandwidth (Mbps).
+# <network_down>  - Downlink network bandwidth (Mbps).
+# <seed>          - Random seed for reproducibility.
 
 function usage() {
     cat <<EOF
-Usage: run_batch.sh <util> <util cpu> <network_up> <network_down> <seed>
+Usage: run.sh <util> <util cpu> <network_up> <network_down> <seed>
 EOF
 }
 

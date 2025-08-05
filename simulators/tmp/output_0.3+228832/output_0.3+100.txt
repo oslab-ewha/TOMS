@@ -1,0 +1,46 @@
+full power utilization: 0.306576
+initial utilization: 0.605595
+power: 5.815828 util: 0.586160
+cpu power: 1.407331 memory power: 2.319064 network power: 2.089433
+offloading ratio: 0.740000
+cpu frequency: 
+1	0.5	0.25	0.125 
+11	19	29	41 
+period violation: 0
+full power utilization: 0.309414
+initial utilization: 0.584606
+power: 5.365735 util: 0.530054
+cpu power: 1.101186 memory power: 2.005813 network power: 2.258736
+offloading ratio: 0.750000
+cpu frequency: 
+1	0.5	0.25	0.125 
+16	17	33	34 
+period violation: 0
+full power utilization: 0.309026
+initial utilization: 0.159752
+power: 7.388846 util: 0.034955
+cpu power: 2.584250 memory power: 2.183280 network power: 2.621316
+offloading ratio: 0.890000
+cpu frequency: 
+1	0.5	0.25	0.125 
+100	0	0	0 
+period violation: 0
+full power utilization: 0.306676
+initial utilization: 1.209713
+power: 12.450928 util: 0.998498
+cpu power: 10.406693 memory power: 2.044235 network power: 0.000000
+offloading ratio: 0.000000
+cpu frequency: 
+1	0.5	0.25	0.125 
+27	32	31	10 
+period violation: 0
+full power utilization: 0.301327
+initial utilization: 0.314393
+power: 17.525186 util: 0.339442
+cpu power: 16.156092 memory power: 1.369094 network power: 0.000000
+offloading ratio: 0.000000
+cpu frequency: 
+1	0.5	0.25	0.125 
+100	0	0	0 
+period violation: 0
+Simulation completed. Results saved in ./tmp/output_0.3+228832

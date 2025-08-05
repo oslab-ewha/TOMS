@@ -1,0 +1,135 @@
+{
+  "total_tasks": 100,
+  "type_distribution": {
+    "CED": 20,
+    "NCED": 25,
+    "PP": 35,
+    "NPP": 20
+  },
+  "type_parameters": {
+    "CED": {
+      "wcet": [
+        15,
+        20
+      ],
+      "period": [
+        100,
+        200
+      ],
+      "memreq": [
+        1000,
+        2000
+      ],
+      "mem_active_ratio": [
+        0.8,
+        1.0
+      ],
+      "task_size": [
+        6000,
+        10000
+      ],
+      "input_size": [
+        3000,
+        5000
+      ],
+      "output_size": [
+        2000,
+        4000
+      ],
+      "offloading_bool": 1
+    },
+    "NCED": {
+      "wcet": [
+        8,
+        12
+      ],
+      "period": [
+        200,
+        400
+      ],
+      "memreq": [
+        800,
+        1500
+      ],
+      "mem_active_ratio": [
+        0.6,
+        0.9
+      ],
+      "task_size": [
+        3000,
+        6000
+      ],
+      "input_size": [
+        1500,
+        3000
+      ],
+      "output_size": [
+        1000,
+        2000
+      ],
+      "offloading_bool": 1
+    },
+    "PP": {
+      "wcet": [
+        2,
+        6
+      ],
+      "period": [
+        10,
+        20
+      ],
+      "memreq": [
+        200,
+        500
+      ],
+      "mem_active_ratio": [
+        0.3,
+        0.5
+      ],
+      "task_size": [
+        1000,
+        2000
+      ],
+      "input_size": [
+        300,
+        800
+      ],
+      "output_size": [
+        200,
+        500
+      ],
+      "offloading_bool": 0
+    },
+    "NPP": {
+      "wcet": [
+        1,
+        4
+      ],
+      "period": [
+        30,
+        60
+      ],
+      "memreq": [
+        100,
+        300
+      ],
+      "mem_active_ratio": [
+        0.1,
+        0.3
+      ],
+      "task_size": [
+        500,
+        1000
+      ],
+      "input_size": [
+        100,
+        300
+      ],
+      "output_size": [
+        100,
+        200
+      ],
+      "offloading_bool": 0
+    }
+  }
+}
