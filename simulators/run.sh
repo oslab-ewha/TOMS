@@ -54,7 +54,7 @@ create_base_config() {
 
 # wcet_min wcet_max mem_total util_cpu util_target n_tasks task_size_min task_size_max input_size_min input_size_max output_size_min output_size_max
 *gentask
-500 1000 2000 $utilCpu $utilTarget 100 4000 6000 800 4000 800 2000
+10 1000 2000 $utilCpu $utilTarget 100 4000 6000 2000 4000 2000 4000
 
 # uplink_min uplink_max downlink_min downlink_max n_networks
 *gennetwork

@@ -1,0 +1,8 @@
+initial utilization: 1.094966
+power: 7.877437 util: 0.999000
+cpu power: 6.872887 memory power: 1.004550 network power: 0.000000
+offloading ratio: 0.000000
+cpu frequency: 
+1	0.5	0.25	0.125 
+0	2	4	1 
+period violation: 0

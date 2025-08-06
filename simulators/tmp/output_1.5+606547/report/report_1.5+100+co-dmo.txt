@@ -1,0 +1,1 @@
+# generation power_min power_avg power_max util_min util_avg util_max

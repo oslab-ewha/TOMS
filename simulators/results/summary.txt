@@ -1,0 +1,20 @@
+=== codmo ===
+initial utilization: 0.965785
+power: 7.448203 util: 1.000126
+====================
+=== codmoct ===
+initial utilization: 0.965785
+power: 7.448203 util: 1.000126
+====================
+=== dmo ===
+initial utilization: 0.965785
+power: 7.448203 util: 1.000126
+====================
+=== lec ===
+initial utilization: 1.094966
+power: 7.877437 util: 0.999000
+====================
+=== rnd ===
+initial utilization: 0.965785
+power: 7.154172 util: 1.437900
+====================
