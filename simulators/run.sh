@@ -54,7 +54,7 @@ create_base_config() {
 
 # wcet_min wcet_max mem_total util_cpu util_target n_tasks task_size_min task_size_max input_size_min input_size_max output_size_min output_size_max
 *gentask
-10 1000 2000 $utilCpu $utilTarget 100 4000 6000 2000 4000 2000 4000
+100 1000 2000 $utilCpu $utilTarget 100 4000 6000 2000 4000 2000 4000
 
 # uplink_min uplink_max downlink_min downlink_max n_networks
 *gennetwork
@@ -145,8 +145,8 @@ mkdir -p $OUTPUT/report
 mkdir -p $OUTPUT/task
 touch $OUTPUT/output_$utilTarget+$networkUp.txt
 
-# 1. CO-DMO-CT (TEE=1, All optimizations enabled)
-echo "*CO-DMO-CT" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+# 1. CO-DMO-DT (TEE=1, All optimizations enabled)
+echo "*CO-DMO-DT" >> $OUTPUT/output_$utilTarget+$networkUp.txt
 gastask_conf_1=$OUTPUT/conf/gastask_co-dmo-ct_$utilTarget+$$.conf
 create_base_config $gastask_conf_1 1 true true
 ./gastask -s $seed $gastask_conf_1 | tee -a $OUTPUT/output_$utilTarget+$networkUp.txt
