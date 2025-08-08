@@ -42,11 +42,13 @@ get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud
 	wcet_scaled = task->wcet * wcet_scaled_cpu * wcet_scaled_mem; // ADDMEM
 	// wcet_scaled = task->wcet * wcet_scaled_cpu; 
 	
-	if (wcet_scaled >= task->period)
-		FATAL(3, "task[%u]: scaled wcet exceeds task period: %lf > %u", task->no, wcet_scaled, task->period);
-
+	// if (wcet_scaled >= task->period)
+	// 	FATAL(3, "task[%u]: scaled wcet exceeds task period: %lf > %u", task->no, wcet_scaled, task->period);
+	
 	transtime = (task->task_size + task->input_size)/(double)network->uplink + task->output_size/(double)network->downlink;  
 	netcomtime = net_commander->intercept_out + net_commander->intercept_in;
+	
+	
 	*putil = (wcet_scaled  * (1.0 - offloadingratios[offloadingratio]) + (wcet_scaled_cpu * netcomtime) * offloadingratios[offloadingratio]) / task->period; 
 	*pdeadline = (wcet_scaled_cloud * task->wcet + wcet_scaled_cpu * netcomtime + transtime) / (task->period) * offloadingratios[offloadingratio]; //gyuri 
 	cpu_power_unit = (cpufreq->power_active * wcet_scaled_cpu + cpufreq->power_idle * wcet_scaled_mem) / (wcet_scaled_cpu + wcet_scaled_mem);
@@ -79,15 +81,15 @@ void get_task_utilpower_TEE(unsigned no_task, unsigned char mem_type, unsigned c
 
 	// TEE
 	double IET, IDT, OET, ODT;
-	double slowdown = 0.028;
+	double slowdown = 0.08;
 
 	IET = task->input_size / 1000;
 	//IDT = IET;
 	OET = task->output_size / 1000;
 	//ODT = OET;
 
-	if (wcet_scaled >= task->period)
-		FATAL(3, "task[%u]: scaled wcet exceeds task period: %lf > %u", task->no, wcet_scaled, task->period);
+	//if (wcet_scaled >= task->period)
+	//	FATAL(3, "task[%u]: scaled wcet exceeds task period: %lf > %u", task->no, wcet_scaled, task->period);
 
 	transtime = (task->task_size + task->input_size) / (double)network->uplink + task->output_size / (double)network->downlink;
 	// TEE

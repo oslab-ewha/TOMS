@@ -21,6 +21,10 @@ double		cutoff, penalty;
 extern unsigned	n_clouds; 
 extern cloud_t  clouds[MAX_CLOUDS]; 
 
+extern task_t tasks[MAX_TASKS];
+extern unsigned n_tasks;
+
+
 LIST_HEAD(genes_by_util);
 LIST_HEAD(genes_by_power);
 LIST_HEAD(genes_by_score);
@@ -329,10 +333,18 @@ init_gene(gene_t *gene)
 	assign_taskattrs(&gene->taskattrs_cloud, n_clouds); 
 	assign_taskattrs(&gene->taskattrs_offloadingratio, n_offloadingratios); 
 
+	for (i = 0; i < n_tasks; i++) {
+        if (tasks[i].offloading_bool == 0)
+            gene->taskattrs_offloadingratio.attrs[i] = 0;  // 강제 local 실행
+        else
+            gene->taskattrs_offloadingratio.attrs[i] = get_rand(n_offloadingratios);
+    }
+
 	for (i = 0; i < MAX_TRY; i++) {
 		INIT_LIST_HEAD(&gene->list_util);
 		INIT_LIST_HEAD(&gene->list_power);
 		INIT_LIST_HEAD(&gene->list_score);
+
 		
 		if (!check_memusage(gene)) {
 			balance_mem_types(gene);
@@ -357,7 +369,7 @@ init_gene(gene_t *gene)
 		lower_utilization(gene);
 	}
 
-	FATAL(3, "cannot generate initial genes: utilization too high: %lf", gene->util);
+	//FATAL(3, "cannot generate initial genes: utilization too high: %lf", gene->util);
 }
 
 static void
@@ -388,9 +400,23 @@ static BOOL
 do_crossover(gene_t *newborn, gene_t *gene1, gene_t *gene2, unsigned crosspt_ratio, unsigned crosspt_cpufreq, unsigned crosspt_mem) // ADDMEM
 {
 	inherit_values(&newborn->taskattrs_mem, &gene1->taskattrs_mem, &gene2->taskattrs_mem, crosspt_mem); //ADDMEM
-	inherit_values(&newborn->taskattrs_offloadingratio, &gene1->taskattrs_offloadingratio, &gene2->taskattrs_offloadingratio, crosspt_ratio); 
+	//inherit_values(&newborn->taskattrs_offloadingratio, &gene1->taskattrs_offloadingratio, &gene2->taskattrs_offloadingratio, crosspt_ratio); 
 	inherit_values(&newborn->taskattrs_cpufreq, &gene1->taskattrs_cpufreq, &gene2->taskattrs_cpufreq, crosspt_cpufreq);
 	
+// Offloading ratio는 special case로 처리
+    for (int i = 0; i < n_tasks; i++) {
+        if (tasks[i].offloading_bool == 0) {
+            newborn->taskattrs_offloadingratio.attrs[i] = 0;  // 강제 local
+        } else {
+            if (i < crosspt_ratio) {
+                newborn->taskattrs_offloadingratio.attrs[i] = gene1->taskattrs_offloadingratio.attrs[i];
+            } else {
+                newborn->taskattrs_offloadingratio.attrs[i] = gene2->taskattrs_offloadingratio.attrs[i];
+            }
+        }
+    }
+    //setup_taskattrs(&newborn->taskattrs_offloadingratio);
+
 	if (!check_memusage(newborn))
 		return FALSE;
 	// TEE
@@ -474,6 +500,7 @@ crossover(void)
 		if (do_crossover(newborn, gene1, gene2, crosspt_ratio, crosspt_cpufreq, crosspt_mem))  // ADDMEM
 			break;
 	}
+
 	if (i == MAX_TRY) {
 		FATAL(3, "cannot execute crossover");
 	}
@@ -490,6 +517,14 @@ run_GA(void)
 	while (gen <= max_gen) {
 		crossover();
 		gen++;
+		// 마지막 세대에서만 평가할 거면:
+		if (gen == max_gen) {
+			for (int i = 0; i < n_pops; i++) {
+				check_utilpower_TEE(genes + i);
+        		sort_gene(genes + i);
+    		}
+		}
+
 		add_report(gen);
 	}
 	close_report();

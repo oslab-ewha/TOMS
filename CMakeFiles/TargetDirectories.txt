@@ -1,0 +1,4 @@
+/home/dys/new/TOMS/CMakeFiles/gastask.dir
+/home/dys/new/TOMS/CMakeFiles/gasgen.dir
+/home/dys/new/TOMS/CMakeFiles/edit_cache.dir
+/home/dys/new/TOMS/CMakeFiles/rebuild_cache.dir

@@ -13,7 +13,7 @@ static unsigned	memreq_total;
 
 static void gen_offloading_bool(unsigned *offloading_bool)
 {
-	int min_local = (int)((double)n_tasks_target/100 * 50);
+	int min_local = (int)((double)n_tasks_target/100 *0);
 	int locallist[min_local];
 	
 	for (int i = 0; i < min_local; i++)
@@ -29,10 +29,16 @@ static void gen_offloading_bool(unsigned *offloading_bool)
 		}
 	}
 
-	for (int i = 0; i < min_local; i++)
-	{
-		offloading_bool[locallist[i]] = 1;
+	// 초기값은 전부 오프로딩 가능하게 1로 설정
+	for (int i = 0; i < n_tasks_target; i++) {
+		offloading_bool[i] = 1;
 	}
+
+	// 랜덤하게 선택된 일부는 오프로딩 불가능(즉, 로컬 실행 전용)
+	for (int i = 0; i < min_local; i++) {
+		offloading_bool[locallist[i]] = 0;
+	}
+
 }
 
 static void
