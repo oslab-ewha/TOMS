@@ -1,0 +1,7 @@
+# mem_idx cpufreq_idx cloud_idx offloadingratio_idx
+0 3 0 0
+0 3 0 0
+0 3 0 0
+0 3 0 0
+0 3 0 0
+0 3 0 0
