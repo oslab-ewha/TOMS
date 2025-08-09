@@ -29,8 +29,8 @@ RATIOS = {           # 유형 비율 합=1.0
 }
 
 # 목표 이용률 구간 (Σ wcet/period)
-TARGET_UTIL_MIN = 0.70
-TARGET_UTIL_MAX = 0.80
+TARGET_UTIL_MIN = 0.85
+TARGET_UTIL_MAX = 0.9500000000000001
 
 # 오프로딩 여부 기본값(유형별). 필요하면 바꿔도 됨.
 OFFLOAD_FLAG = {

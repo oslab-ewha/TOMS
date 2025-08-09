@@ -1,0 +1,19 @@
+*CO-DMO-DT
+initial utilization: 1.431579
+power: 10.535605 util: 0.930344
+cpu power: 3.229446 memory power: 2.276867 network power: 5.029292
+offloading ratio: 0.625000
+cpu frequency: 
+1	0.5	0.25	0.125 
+17	16	24	23 
+period violation: 0
+*CO-DMO
+initial utilization: 1.431579
+power: 10.535605 util: 0.930344
+cpu power: 3.229446 memory power: 2.276867 network power: 5.029292
+offloading ratio: 0.625000
+cpu frequency: 
+1	0.5	0.25	0.125 
+17	16	24	23 
+period violation: 0
+*Offloading

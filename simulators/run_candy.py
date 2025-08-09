@@ -6,14 +6,14 @@ BASE_CONF = Path("candy_cycle.conf")
 OUTPUT_ROOT = Path("./tmp")
 
 SCENARIOS = [
-    ("CO-DMO-DT", 1, True,  True),
+    ("CO-DMO-CT", 1, True,  True),
     ("CO-DMO",    0, True,  True),
     ("Offloading",0, True,  False),
     ("DVS",       0, False, True),
     ("Baseline",  0, False, False),
 ]
 
-def modify_config_direct(base_path, out_path, tee_enabled, offloading_enabled, dvfs_enabled, algorithm_name):
+def modify_config_direct(base_path, out_path, tee_enabled, offloading_enabled, dvfs_enabled, algorithm_name, network_bandwidth=None):
     """직접 config 파일을 수정"""
     with open(base_path, 'r') as f:
         lines = f.readlines()
@@ -24,6 +24,23 @@ def modify_config_direct(base_path, out_path, tee_enabled, offloading_enabled, d
             if i + 1 < len(lines):
                 lines[i + 1] = f"{tee_enabled}\n"
                 break
+
+    # Network 설정 수정
+    if network_bandwidth is not None:
+        in_network = False
+        for i, line in enumerate(lines):
+            if line.strip().startswith('*network'):
+                in_network = True
+                continue
+            if in_network and (line.strip() == '' or line.startswith('*')):
+                in_network = False
+            if in_network and re.match(r'^\s*\d', line.strip()):
+                # network 라인 형식: "120 120" (up down bandwidth)
+                parts = line.strip().split()
+                if len(parts) >= 2:
+                    parts[0] = str(network_bandwidth)  # up bandwidth
+                    parts[1] = str(network_bandwidth)  # down bandwidth
+                    lines[i] = ' '.join(parts) + '\n'
 
     # 메모리 설정 (CO-DMO가 아니면 dram만 남기고 nvram은 주석처리)
     if not str(algorithm_name).startswith('CO-DMO'):
@@ -96,13 +113,16 @@ def run_experiment(util_target, util_cpu, network_up, network_down, seed):
 
     main_out = outdir / f"output_{util_target}+{network_up}.txt"
     main_out.write_text("", encoding="utf-8")
+    
+    # network_up을 정수로 변환
+    network_bandwidth = int(network_up) if network_up else 120
 
     for name, tee, offl, dvfs in SCENARIOS:
         print(f"Running {name}...")
         conf_path = outdir / "conf" / f"gastask_{name}_{util_target}+{pid}.conf"
 
-        # 1) 직접 config 생성
-        modify_config_direct(BASE_CONF, conf_path, tee, offl, dvfs, name)
+        # 1) 직접 config 생성 (network_bandwidth 파라미터 추가)
+        modify_config_direct(BASE_CONF, conf_path, tee, offl, dvfs, name, network_bandwidth)
 
         # 2) gastask 실행
         with open(main_out, "a", encoding="utf-8") as f:
@@ -124,15 +144,21 @@ def run_experiment(util_target, util_cpu, network_up, network_down, seed):
     print(f"Simulation completed. Results saved in {outdir}")
 
 if __name__ == "__main__":
-    # 간단한 network 매개변수만 받기
+    # network와 workload 매개변수 받기
+    # 사용법: python run_candy.py [network] [workload]
     if len(sys.argv) < 2:
         network_bandwidth = 120  # 기본값
+        workload = 0.8
+    elif len(sys.argv) < 3:
+        network_bandwidth = int(sys.argv[1])
+        workload = 0.8  # 기본값
     else:
         network_bandwidth = int(sys.argv[1])
+        workload = float(sys.argv[2])
     
-    # 기본 매개변수로 실험 실행
-    util = "0.8"
-    util_cpu = "0.8" 
+    # 매개변수로 실험 실행
+    util = str(workload)
+    util_cpu = str(workload) 
     net_up = str(network_bandwidth)
     net_down = str(network_bandwidth)
     seed = "0"

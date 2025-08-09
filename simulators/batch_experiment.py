@@ -10,18 +10,30 @@ import subprocess
 import re
 import shutil
 import csv
+import os
 from pathlib import Path
 from itertools import product
 import time
 
+# 스크립트 위치를 기준으로 작업 디렉토리 설정
+SCRIPT_DIR = Path(__file__).parent.absolute()
+SIMULATORS_DIR = SCRIPT_DIR if SCRIPT_DIR.name == "simulators" else SCRIPT_DIR / "simulators"
+
+# 작업 디렉토리를 simulators로 변경
+os.chdir(SIMULATORS_DIR)
+print(f"작업 디렉토리: {SIMULATORS_DIR}")
+
 # 실험 매개변수 정의
 EXPERIMENTS = {
-    "server_power": [2, 4, 6],           # cloud computation_power
-    "network": [0, 30, 60, 90, 120],     # network bandwidth
-    "workload": [0.3, 0.5, 0.7, 0.9],   # TARGET_UTIL 범위
+    #"server_power": [2, 4, 8],           # cloud computation_power
+    "server_power": [2, 4],
+    "network": [10, 30, 120],     # network bandwidth
+    #"network": [10, 30, 60, 90, 120],
+    #"workload": [0.2, 0.3, 0.5, 0.7, 0.9, 1.2]
+    "workload": [0.3, 0.5,  0.9],   # TARGET_UTIL 범위
 }
 
-ALGORITHMS = ["CO-DMO-DT", "CO-DMO", "Offloading", "DVS", "Baseline"]
+ALGORITHMS = ["CO-DMO-CT", "CO-DMO", "Offloading", "DVS", "Baseline"]
 
 # 결과 저장 파일
 RESULTS_FILE = Path("experiment_results.csv")
@@ -50,7 +62,15 @@ class ExperimentRunner:
     
     def modify_workload(self, target_util):
         """task_gen.py TARGET_UTIL 수정 및 태스크 재생성"""
+        # task_gen.py는 simulators 폴더에 있음
         task_gen_file = Path("task_gen.py")
+        
+        if not task_gen_file.exists():
+            print(f"  오류: {task_gen_file} 파일을 찾을 수 없습니다.")
+            return
+            
+        print(f"  task_gen.py 수정 중: {task_gen_file.absolute()}")
+            
         with open(task_gen_file, 'r') as f:
             content = f.read()
         
@@ -58,32 +78,51 @@ class ExperimentRunner:
         util_min = max(0.1, target_util - 0.05)
         util_max = min(1.0, target_util + 0.05)
         
+        print(f"  TARGET_UTIL 범위: {util_min:.2f} ~ {util_max:.2f}")
+        
+        # 정규표현식으로 수정
+        old_content = content
         content = re.sub(r'TARGET_UTIL_MIN = [\d.]+', f'TARGET_UTIL_MIN = {util_min}', content)
         content = re.sub(r'TARGET_UTIL_MAX = [\d.]+', f'TARGET_UTIL_MAX = {util_max}', content)
+        
+        # 수정 확인
+        if content == old_content:
+            print(f"  경고: TARGET_UTIL 값이 수정되지 않았습니다.")
         
         with open(task_gen_file, 'w') as f:
             f.write(content)
         
-        # 새 태스크 생성
-        subprocess.run(['python', 'task_gen.py'], capture_output=True, text=True)
+        # 태스크 생성
+        print(f"  새 태스크 생성 중...")
+        result = subprocess.run(['python', 'task_gen.py'], capture_output=True, text=True)
+        if result.returncode != 0:
+            print(f"  태스크 생성 오류: {result.stderr}")
+            return
+        
+        print(f"  태스크 생성 완료")
         
         # candy_cycle.conf의 *task 섹션 업데이트
         self.update_task_section()
-        print(f"  Workload 설정: {target_util:.1f}")
+        print(f"  Workload 설정 완료: {target_util:.1f}")
     
     def update_task_section(self):
         """task_gen.txt를 candy_cycle.conf에 반영"""
+        # task_gen.txt는 현재 디렉토리에 생성됨
         task_gen_txt = Path("task_gen.txt")
         config_file = Path("candy_cycle.conf")
         
         if not task_gen_txt.exists():
+            print(f"  경고: {task_gen_txt} 파일을 찾을 수 없습니다.")
             return
             
+        print(f"  task_gen.txt에서 태스크 읽는 중...")
+        
         # task_gen.txt에서 태스크 데이터 읽기
         with open(task_gen_txt, 'r') as f:
             lines = f.readlines()
         
         task_lines = [line.strip() for line in lines if line.strip() and not line.startswith('#')]
+        print(f"  읽은 태스크 개수: {len(task_lines)}")
         
         # candy_cycle.conf 업데이트
         with open(config_file, 'r') as f:
@@ -94,8 +133,14 @@ class ExperimentRunner:
         task_section += '\n'.join(task_lines)
         
         # 기존 *task 섹션 교체
+        old_content = content
         pattern = r'# wcet period memreq.*?\*task\n.*?(?=\n\*|\Z)'
         content = re.sub(pattern, task_section, content, flags=re.DOTALL)
+        
+        if content == old_content:
+            print(f"  경고: candy_cycle.conf의 *task 섹션이 수정되지 않았습니다.")
+        else:
+            print(f"  candy_cycle.conf *task 섹션 업데이트 완료")
         
         with open(config_file, 'w') as f:
             f.write(content)
@@ -108,8 +153,8 @@ class ExperimentRunner:
         self.modify_server_power(server_power)
         self.modify_workload(workload)
         
-        # run_candy.py 실행 (network 매개변수 포함)
-        cmd = ['python', 'run_candy.py', str(network)]
+        # run_candy.py 실행 (network, workload 매개변수 포함)
+        cmd = ['python', 'run_candy.py', str(network), str(workload)]
         result = subprocess.run(cmd, capture_output=True, text=True)
         
         if result.returncode != 0:

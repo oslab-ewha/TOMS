@@ -501,9 +501,9 @@ crossover(void)
 			break;
 	}
 
-	if (i == MAX_TRY) {
-		FATAL(3, "cannot execute crossover");
-	}
+	// if (i == MAX_TRY) {
+	// 	FATAL(3, "cannot execute crossover");
+	// }
 }
 
 void
@@ -521,7 +521,7 @@ run_GA(void)
 		if (gen == max_gen) {
 			for (int i = 0; i < n_pops; i++) {
 				check_utilpower_TEE(genes + i);
-        		sort_gene(genes + i);
+        		//sort_gene(genes + i);
     		}
 		}
 

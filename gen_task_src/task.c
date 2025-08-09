@@ -13,6 +13,10 @@
 
 #include "gastask.h"
 
+#define MBPS_TO_KBps   (1000.0 / 8.0)    // 1 Mbps = 125 KB/s
+#define KBps_TO_KBms   (1.0 / 1000.0)    // KB/s → KB/ms
+#define MBPS_TO_KBms   (MBPS_TO_KBps * KBps_TO_KBms)  // 최종 변환 (0.125)
+
 unsigned	n_tasks;
 task_t	tasks[MAX_TASKS];
 
@@ -35,7 +39,7 @@ get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud
 	double	wcet_scaled_mem = 1 / mem->wcet_scale;
 	double	wcet_scaled_cloud = 1 / cloud->computation_power; 
 	double	cpu_power_unit;
-	double  net_com_power_unit = 75; 
+	double  net_com_power_unit = 50; 
 	double	wcet_scaled;
 	double	transtime; 
 	double  netcomtime; 
@@ -45,7 +49,7 @@ get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud
 	// if (wcet_scaled >= task->period)
 	// 	FATAL(3, "task[%u]: scaled wcet exceeds task period: %lf > %u", task->no, wcet_scaled, task->period);
 	
-	transtime = (task->task_size + task->input_size)/(double)network->uplink + task->output_size/(double)network->downlink;  
+	transtime = ((task->task_size + task->input_size) / (double)network->uplink + task->output_size / (double)network->downlink) / MBPS_TO_KBms;
 	netcomtime = net_commander->intercept_out + net_commander->intercept_in;
 	
 	
@@ -53,7 +57,7 @@ get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud
 	*pdeadline = (wcet_scaled_cloud * task->wcet + wcet_scaled_cpu * netcomtime + transtime) / (task->period) * offloadingratios[offloadingratio]; //gyuri 
 	cpu_power_unit = (cpufreq->power_active * wcet_scaled_cpu + cpufreq->power_idle * wcet_scaled_mem) / (wcet_scaled_cpu + wcet_scaled_mem);
 	*ppower_cpu = cpu_power_unit * (wcet_scaled / task->period) * (1 - offloadingratios[offloadingratio]) + cpu_power_unit * (netcomtime / task->period) * (offloadingratios[offloadingratio]); 
-	*ppower_net_com = net_com_power_unit * ((transtime + netcomtime) / task->period) * offloadingratios[offloadingratio];  
+	*ppower_net_com = net_com_power_unit * ((transtime) / task->period) * offloadingratios[offloadingratio];  
 	*ppower_mem = (task->memreq * (task->mem_active_ratio * mem->power_active + (1 - task->mem_active_ratio) * mem->power_idle) * wcet_scaled / task->period +
 		task->memreq * mem->power_idle * (1 - wcet_scaled / task->period));
 }
@@ -72,7 +76,7 @@ void get_task_utilpower_TEE(unsigned no_task, unsigned char mem_type, unsigned c
 	double wcet_scaled_mem = 1 / mem->wcet_scale;
 	double wcet_scaled_cloud = 1 / cloud->computation_power;
 	double cpu_power_unit;
-	double net_com_power_unit = 75;
+	double net_com_power_unit = 1.0;
 	double wcet_scaled;
 	double transtime;
 	double netcomtime;
@@ -81,17 +85,17 @@ void get_task_utilpower_TEE(unsigned no_task, unsigned char mem_type, unsigned c
 
 	// TEE
 	double IET, IDT, OET, ODT;
-	double slowdown = 0.08;
+	double slowdown = 1.08;
 
-	IET = task->input_size / 1000;
-	//IDT = IET;
-	OET = task->output_size / 1000;
-	//ODT = OET;
+	IET = task->input_size / 200.0;
+	IDT = IET;
+	OET = task->output_size / 200.0;
+	ODT = OET;
 
 	//if (wcet_scaled >= task->period)
 	//	FATAL(3, "task[%u]: scaled wcet exceeds task period: %lf > %u", task->no, wcet_scaled, task->period);
 
-	transtime = (task->task_size + task->input_size) / (double)network->uplink + task->output_size / (double)network->downlink;
+	transtime = ((task->task_size + task->input_size) / (double)network->uplink + task->output_size / (double)network->downlink) / MBPS_TO_KBms;
 	// TEE
 	
 	netcomtime = net_commander->intercept_out + net_commander->intercept_in + IET + ODT;
@@ -108,7 +112,7 @@ void get_task_utilpower_TEE(unsigned no_task, unsigned char mem_type, unsigned c
 	*ppower_cpu = cpu_power_unit * (wcet_scaled / task->period) * (1 - offloadingratios[offloadingratio]) 
 				+ cpu_power_unit * (netcomtime / task->period) * (offloadingratios[offloadingratio]);
 
-	*ppower_net_com = net_com_power_unit * ((transtime + netcomtime) / task->period) * offloadingratios[offloadingratio];
+	*ppower_net_com = net_com_power_unit * ((transtime) / task->period) * offloadingratios[offloadingratio];
 	
 	*ppower_mem = (task->memreq * (task->mem_active_ratio * mem->power_active + (1 - task->mem_active_ratio) * mem->power_idle) * wcet_scaled / task->period +
 				   task->memreq * mem->power_idle * (1 - wcet_scaled / task->period));

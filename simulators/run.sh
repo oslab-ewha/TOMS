@@ -145,8 +145,8 @@ mkdir -p $OUTPUT/report
 mkdir -p $OUTPUT/task
 touch $OUTPUT/output_$utilTarget+$networkUp.txt
 
-# 1. CO-DMO-DT (TEE=1, All optimizations enabled)
-echo "*CO-DMO-DT" >> $OUTPUT/output_$utilTarget+$networkUp.txt
+# 1. CO-DMO-CT (TEE=1, All optimizations enabled)
+echo "*CO-DMO-CT" >> $OUTPUT/output_$utilTarget+$networkUp.txt
 gastask_conf_1=$OUTPUT/conf/gastask_co-dmo-ct_$utilTarget+$$.conf
 create_base_config $gastask_conf_1 1 true true
 ./gastask -s $seed $gastask_conf_1 | tee -a $OUTPUT/output_$utilTarget+$networkUp.txt
