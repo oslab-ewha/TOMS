@@ -124,14 +124,17 @@ def run_experiment(util_target, util_cpu, network_up, network_down, seed):
     print(f"Simulation completed. Results saved in {outdir}")
 
 if __name__ == "__main__":
-    # bash 스크립트와 같은 인자 형태 유지
-    if len(sys.argv) < 4:
-        print("Usage: run_candy.py <util> <util cpu> <network_up> <network_down> <seed>")
-        sys.exit(1)
-    util = sys.argv[1]
-    util_cpu = sys.argv[2]
-    net_up = sys.argv[3]
-    net_down = sys.argv[4]
-    seed = sys.argv[5] if len(sys.argv) > 5 else "0"
+    # 간단한 network 매개변수만 받기
+    if len(sys.argv) < 2:
+        network_bandwidth = 120  # 기본값
+    else:
+        network_bandwidth = int(sys.argv[1])
+    
+    # 기본 매개변수로 실험 실행
+    util = "0.8"
+    util_cpu = "0.8" 
+    net_up = str(network_bandwidth)
+    net_down = str(network_bandwidth)
+    seed = "0"
 
     run_experiment(util, util_cpu, net_up, net_down, seed)
