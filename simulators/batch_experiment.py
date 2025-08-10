@@ -25,9 +25,9 @@ print(f"작업 디렉토리: {SIMULATORS_DIR}")
 
 # 실험 매개변수 정의
 EXPERIMENTS = {
-    #"server_power": [2, 4, 8],           # cloud computation_power
-    "server_power": [2, 4],
-    "network": [10, 30, 120],     # network bandwidth
+    "server_power": [2],           # cloud computation_power
+    #"server_power": [2, 4],
+    "network": [0, 100],     # network bandwidth
     #"network": [10, 30, 60, 90, 120],
     #"workload": [0.2, 0.3, 0.5, 0.7, 0.9, 1.2]
     "workload": [0.3, 0.5,  0.9],   # TARGET_UTIL 범위

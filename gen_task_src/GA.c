@@ -18,6 +18,9 @@ unsigned	max_gen = 100000;
 
 double		cutoff, penalty;
 
+extern unsigned	n_networks; 
+extern network_t  networks[MAX_NETWORKS];
+
 extern unsigned	n_clouds; 
 extern cloud_t  clouds[MAX_CLOUDS]; 
 
@@ -334,9 +337,11 @@ init_gene(gene_t *gene)
 	assign_taskattrs(&gene->taskattrs_offloadingratio, n_offloadingratios); 
 
 	for (i = 0; i < n_tasks; i++) {
-        if (tasks[i].offloading_bool == 0)
+		
+        if (tasks[i].offloading_bool == 0 ) {
             gene->taskattrs_offloadingratio.attrs[i] = 0;  // 강제 local 실행
-        else
+		}
+		else
             gene->taskattrs_offloadingratio.attrs[i] = get_rand(n_offloadingratios);
     }
 

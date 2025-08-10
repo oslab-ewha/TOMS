@@ -29,29 +29,41 @@ extern net_commander_t  net_commanders[MAX_NETCOMMANDERS];
 void
 get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud_type, unsigned char cpufreq_type, unsigned char offloadingratio, double *putil, double *ppower_cpu, double *ppower_mem, double *ppower_net_com, double *pdeadline)
 {
-	task_t	*task = tasks + no_task;
-	mem_t	*mem = mems + mem_type;
+	task_t    *task = tasks + no_task;
+	mem_t    *mem = mems + mem_type;
 	cloud_t *cloud = clouds + cloud_type; 
-	cpufreq_t	*cpufreq = cpufreqs + cpufreq_type;
-	network_t	*network = networks + no_task; 
+	cpufreq_t    *cpufreq = cpufreqs + cpufreq_type;
+	network_t    *network = networks + no_task; 
 	net_commander_t   *net_commander = net_commanders + no_task; 
-	double	wcet_scaled_cpu = 1 / cpufreq->wcet_scale;
-	double	wcet_scaled_mem = 1 / mem->wcet_scale;
-	double	wcet_scaled_cloud = 1 / cloud->computation_power; 
-	double	cpu_power_unit;
-	double  net_com_power_unit = 50; 
-	double	wcet_scaled;
-	double	transtime; 
+	double    wcet_scaled_cpu = 1 / cpufreq->wcet_scale;
+	double    wcet_scaled_mem = 1 / mem->wcet_scale;
+	double    wcet_scaled_cloud = 1 / cloud->computation_power; 
+	double    cpu_power_unit;
+	double  net_com_power_unit = 5; 
+	double    wcet_scaled;
+	double    transtime; 
 	double  netcomtime; 
+
+	// If any network uplink or downlink is 0, set all tasks' offloading_bool to 0
+	if (network->uplink == 0.0 || network->downlink == 0.0) {
+		for (unsigned i = 0; i < n_tasks; ++i) {
+			tasks[i].offloading_bool = 0;
+		}
+	}
+
 	wcet_scaled = task->wcet * wcet_scaled_cpu * wcet_scaled_mem; // ADDMEM
 	// wcet_scaled = task->wcet * wcet_scaled_cpu; 
 	
 	// if (wcet_scaled >= task->period)
-	// 	FATAL(3, "task[%u]: scaled wcet exceeds task period: %lf > %u", task->no, wcet_scaled, task->period);
-	
-	transtime = ((task->task_size + task->input_size) / (double)network->uplink + task->output_size / (double)network->downlink) / MBPS_TO_KBms;
-	netcomtime = net_commander->intercept_out + net_commander->intercept_in;
-	
+	//     FATAL(3, "task[%u]: scaled wcet exceeds task period: %lf > %u", task->no, wcet_scaled, task->period);
+	if (network->uplink > 0.0 && network->downlink > 0.0) {
+		transtime = ((task->task_size + task->input_size) / (double)network->uplink + task->output_size / (double)network->downlink) / MBPS_TO_KBms;
+		netcomtime = net_commander->intercept_out + net_commander->intercept_in;
+	}
+	else{
+		transtime = 0.0;
+		netcomtime = 0.0;
+	}
 	
 	*putil = (wcet_scaled  * (1.0 - offloadingratios[offloadingratio]) + (wcet_scaled_cpu * netcomtime) * offloadingratios[offloadingratio]) / task->period; 
 	*pdeadline = (wcet_scaled_cloud * task->wcet + wcet_scaled_cpu * netcomtime + transtime) / (task->period) * offloadingratios[offloadingratio]; //gyuri 
@@ -76,12 +88,19 @@ void get_task_utilpower_TEE(unsigned no_task, unsigned char mem_type, unsigned c
 	double wcet_scaled_mem = 1 / mem->wcet_scale;
 	double wcet_scaled_cloud = 1 / cloud->computation_power;
 	double cpu_power_unit;
-	double net_com_power_unit = 1.0;
+	double net_com_power_unit = 5;
 	double wcet_scaled;
 	double transtime;
 	double netcomtime;
-	wcet_scaled = task->wcet * wcet_scaled_cpu * wcet_scaled_mem;
 
+	// If any network uplink or downlink is 0, set all tasks' offloading_bool to 0
+	if (network->uplink == 0.0 || network->downlink == 0.0) {
+		for (unsigned i = 0; i < n_tasks; ++i) {
+			tasks[i].offloading_bool = 0;
+		}
+	}
+
+	wcet_scaled = task->wcet * wcet_scaled_cpu * wcet_scaled_mem;
 
 	// TEE
 	double IET, IDT, OET, ODT;
@@ -93,12 +112,15 @@ void get_task_utilpower_TEE(unsigned no_task, unsigned char mem_type, unsigned c
 	ODT = OET;
 
 	//if (wcet_scaled >= task->period)
-	//	FATAL(3, "task[%u]: scaled wcet exceeds task period: %lf > %u", task->no, wcet_scaled, task->period);
-
-	transtime = ((task->task_size + task->input_size) / (double)network->uplink + task->output_size / (double)network->downlink) / MBPS_TO_KBms;
-	// TEE
-	
-	netcomtime = net_commander->intercept_out + net_commander->intercept_in + IET + ODT;
+	//    FATAL(3, "task[%u]: scaled wcet exceeds task period: %lf > %u", task->no, wcet_scaled, task->period);
+	if (network->uplink > 0.0 && network->downlink > 0.0) {
+		transtime = ((task->task_size + task->input_size) / (double)network->uplink + task->output_size / (double)network->downlink) / MBPS_TO_KBms;
+		// TEE
+		netcomtime = net_commander->intercept_out + net_commander->intercept_in + IET + ODT;
+	}else{
+		transtime = 0.0;
+		netcomtime = 0.0;
+	}
 	*pdeadline = (wcet_scaled_cloud * task->wcet * ((1 - task->mem_active_ratio) + slowdown * task->mem_active_ratio) + wcet_scaled_cpu * netcomtime + transtime) / (task->period) * offloadingratios[offloadingratio]; // 1
 	
 	
