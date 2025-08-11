@@ -158,7 +158,7 @@ if __name__ == "__main__":
     
     # 매개변수로 실험 실행
     util = str(workload)
-    util_cpu = str(workload) 
+    util_cpu = str(workload - 0.08)  
     net_up = str(network_bandwidth)
     net_down = str(network_bandwidth)
     seed = "0"

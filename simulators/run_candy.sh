@@ -68,7 +68,7 @@ run_experiment() {
 }
 
 # Run all algorithms
-run_experiment "CO-DMO-DT" 1 true true
+run_experiment "CO-DMO-CT" 1 true true
 run_experiment "CO-DMO" 0 true true
 run_experiment "Offloading" 0 true false
 run_experiment "DVS" 0 false true

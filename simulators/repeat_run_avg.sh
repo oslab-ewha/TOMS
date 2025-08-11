@@ -2,10 +2,10 @@
 
 # set experimental values
 # workloads=(0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6 0.65 0.7 0.75 0.8 0.85 0.9 0.95 1.0 1.05 1.1 1.15 1.2)
-workloads=(0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9 1.0 1.1 1.2)
+workloads=(0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9 )
 
-networkUp=100
-networkDown=100
+networkUp=10
+networkDown=10
 seed=0
 iterations=1
 
@@ -33,7 +33,7 @@ for workload in "${workloads[@]}"; do
     declare -A sums
     declare -A counts
 
-    sections=("CO-DMO-DT" "CO-DMO" "Offloading" "DVS" "Baseline")
+    sections=("CO-DMO-CT" "CO-DMO" "Offloading" "DVS" "Baseline")
     metrics=("Power" "Util" "CPU_Power" "Memory_Power" "Network_Power" "Offloading_Ratio" "CPU_Frequency_1" "CPU_Frequency_0.5" "CPU_Frequency_0.25" "CPU_Frequency_0.125")
 
     for section in "${sections[@]}"; do
@@ -65,15 +65,15 @@ for workload in "${workloads[@]}"; do
 
         for section in "${sections[@]}"; do
             case $section in
-                "CO-DMO-DT")
-                    # Extract CO-DMO-DT section data
-                    power=$(grep -A 10 "^\*CO-DMO-DT" "$output_file" | grep "^power:" | awk '{print $2}')
-                    util=$(grep -A 10 "^\*CO-DMO-DT" "$output_file" | grep "^power:" | awk '{print $4}')
-                    cpu_power=$(grep -A 10 "^\*CO-DMO-DT" "$output_file" | grep "^cpu power:" | awk '{print $3}')
-                    memory_power=$(grep -A 10 "^\*CO-DMO-DT" "$output_file" | grep "^cpu power:" | awk '{print $6}')
-                    network_power=$(grep -A 10 "^\*CO-DMO-DT" "$output_file" | grep "^cpu power:" | awk '{print $9}')
-                    ratio=$(grep -A 10 "^\*CO-DMO-DT" "$output_file" | grep "^offloading ratio:" | awk '{print $3}')
-                    freq_line=$(grep -A 10 "^\*CO-DMO-DT" "$output_file" | grep -A 2 "^cpu frequency:" | tail -1)
+                "CO-DMO-CT")
+                    # Extract CO-DMO-CT section data
+                    power=$(grep -A 10 "^\*CO-DMO-CT" "$output_file" | grep "^power:" | awk '{print $2}')
+                    util=$(grep -A 10 "^\*CO-DMO-CT" "$output_file" | grep "^power:" | awk '{print $4}')
+                    cpu_power=$(grep -A 10 "^\*CO-DMO-CT" "$output_file" | grep "^cpu power:" | awk '{print $3}')
+                    memory_power=$(grep -A 10 "^\*CO-DMO-CT" "$output_file" | grep "^cpu power:" | awk '{print $6}')
+                    network_power=$(grep -A 10 "^\*CO-DMO-CT" "$output_file" | grep "^cpu power:" | awk '{print $9}')
+                    ratio=$(grep -A 10 "^\*CO-DMO-CT" "$output_file" | grep "^offloading ratio:" | awk '{print $3}')
+                    freq_line=$(grep -A 10 "^\*CO-DMO-CT" "$output_file" | grep -A 2 "^cpu frequency:" | tail -1)
                     freq_1=$(echo "$freq_line" | awk '{print $1}')
                     freq_0_5=$(echo "$freq_line" | awk '{print $2}')
                     freq_0_25=$(echo "$freq_line" | awk '{print $3}')

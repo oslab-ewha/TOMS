@@ -164,7 +164,7 @@ if __name__ == "__main__":
     BASE = Path("simulators/candy_cycle.conf")
     out_dir = Path("simulators/tmp"); out_dir.mkdir(exist_ok=True)
     scenarios = [
-        ("CO-DMO-DT", True,  True,  True ),
+        ("CO-DMO-CT", True,  True,  True ),
         ("CO-DMO",    False, True,  True ),
         ("Offloading",False, True,  False),
         ("DVS",       False, False, True ),
