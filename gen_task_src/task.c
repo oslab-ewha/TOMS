@@ -39,7 +39,7 @@ get_task_utilpower(unsigned no_task, unsigned char mem_type, unsigned char cloud
 	double    wcet_scaled_mem = 1 / mem->wcet_scale;
 	double    wcet_scaled_cloud = 1 / cloud->computation_power; 
 	double    cpu_power_unit;
-	double  net_com_power_unit = 12; 
+	double  net_com_power_unit = 1; 
 	double    wcet_scaled;
 	double    transtime; 
 	double  netcomtime; 
@@ -106,11 +106,12 @@ void get_task_utilpower_TEE(unsigned no_task, unsigned char mem_type, unsigned c
 	double IET, IDT, OET, ODT;
 	double slowdown = 1.08;
 
-	IET = task->input_size / 200.0;
+	IET = task->input_size / 2000.0;
 	IDT = IET;
-	OET = task->output_size / 200.0;
+	OET = task->output_size / 2000.0;
 	ODT = OET;
 
+	
 	//if (wcet_scaled >= task->period)
 	//    FATAL(3, "task[%u]: scaled wcet exceeds task period: %lf > %u", task->no, wcet_scaled, task->period);
 	if (network->uplink > 0.0 && network->downlink > 0.0) {
