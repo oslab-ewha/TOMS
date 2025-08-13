@@ -25,18 +25,18 @@ print(f"작업 디렉토리: {SIMULATORS_DIR}")
 
 # 실험 매개변수 정의
 EXPERIMENTS = {
-    #"server_power": [2],           # cloud computation_power
-    "server_power": [2, 4],
-    "network": [10,  30,  50,  70,  90,  110, 120],     # network bandwidth
+    "server_power": [2],           # cloud computation_power
+    #"server_power": [2, 4],
+    "network": [30, 40, 50, 60, 70, 80, 90, 100, 110, 120],     # network bandwidth
     #"network": [10, 30, 60, 90, 120],
     #"workload": [0.2, 0.3, 0.5, 0.7, 0.9, 1.2]
-    "workload": [0.1,  0.3,  0.5,  0.7,  0.9, 1.0, 1.1],   # TARGET_UTIL 범위
+    "workload": [0.9],   # TARGET_UTIL 범위
 }
 
 ALGORITHMS = ["CO-DMO-CT", "CO-DMO", "Offloading", "DVS", "Baseline"]
 
 # 결과 저장 파일
-RESULTS_FILE = Path("new_experiment_results.csv")
+RESULTS_FILE = Path("candy_experiment_results.csv")
 BACKUP_DIR = Path("experiment_backup")
 
 class ExperimentRunner:

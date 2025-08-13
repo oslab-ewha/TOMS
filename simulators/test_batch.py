@@ -17,7 +17,7 @@ TEST_EXPERIMENTS = {
     "workload": [0.5, 0.7],                  # 2개만
 }
 
-ALGORITHMS = ["CO-DMO-CT", "CO-DMO", "Offloading", "DVS", "Baseline"]
+ALGORITHMS = ["CO-DMO-DT", "CO-DMO", "Offloading", "DVS", "Baseline"]
 
 class TestExperimentRunner:
     def __init__(self):

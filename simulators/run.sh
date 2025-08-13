@@ -90,7 +90,7 @@ nvram 1000 0.8  0.01   0.0001
 
 # type computation_power power_active power_idle max_capacity offloading_limit
 *cloud
-mec  1   400   100   100000   1.0
+mec  2   400   100   100000   1.0
 
 # offloading_ratio 
 *offloadingratio

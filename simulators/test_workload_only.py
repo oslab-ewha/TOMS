@@ -20,7 +20,7 @@ TEST_SERVER_POWER = 2
 TEST_NETWORK = 60
 TEST_WORKLOADS = [0.3, 0.7, 0.9]  # 3개만 테스트
 
-ALGORITHMS = ["CO-DMO-CT", "CO-DMO", "Offloading", "DVS", "Baseline"]
+ALGORITHMS = ["CO-DMO-DT", "CO-DMO", "Offloading", "DVS", "Baseline"]
 
 class WorkloadTestRunner:
     def __init__(self):

@@ -27,23 +27,23 @@ print(f"작업 디렉토리: {SIMULATORS_DIR}")
 EXPERIMENTS = {
     "server_power": [2],           # cloud computation_power
     #"server_power": [2, 4],
-    "network": [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130],     # network bandwidth
+    "network": [0, 100],     # network bandwidth
     #"network": [10, 30, 60, 90, 120],
     #"workload": [0.2, 0.3, 0.5, 0.7, 0.9, 1.2]
-    "workload": [0.7],   # TARGET_UTIL 범위
+    "workload": [0.3, 0.5,  0.9],   # TARGET_UTIL 범위
 }
 
 ALGORITHMS = ["CO-DMO-CT", "CO-DMO", "Offloading", "DVS", "Baseline"]
 
 # 결과 저장 파일
-RESULTS_FILE = Path("candy_experiment_results.csv")
-#BACKUP_DIR = Path("experiment_backup")
+RESULTS_FILE = Path("experiment_results.csv")
+BACKUP_DIR = Path("experiment_backup")
 
 class ExperimentRunner:
     def __init__(self):
         self.results = []
-        #self.backup_dir = BACKUP_DIR
-        #self.backup_dir.mkdir(exist_ok=True)
+        self.backup_dir = BACKUP_DIR
+        self.backup_dir.mkdir(exist_ok=True)
         
     def modify_server_power(self, power):
         """cloud computation_power 수정"""
@@ -249,8 +249,8 @@ class ExperimentRunner:
             results.append(data)
             
         # 백업 저장
-        #backup_name = f"exp_{server_power}_{network}_{workload:.1f}_{int(time.time())}"
-        #shutil.copytree(latest_dir, self.backup_dir / backup_name)
+        backup_name = f"exp_{server_power}_{network}_{workload:.1f}_{int(time.time())}"
+        shutil.copytree(latest_dir, self.backup_dir / backup_name)
         
         return results
     
@@ -300,7 +300,7 @@ class ExperimentRunner:
             writer.writerows(self.results)
         
         print(f"결과 저장 완료: {RESULTS_FILE}")
-        #print(f"백업 저장 위치: {self.backup_dir}")
+        print(f"백업 저장 위치: {self.backup_dir}")
 
 def main():
     runner = ExperimentRunner()
