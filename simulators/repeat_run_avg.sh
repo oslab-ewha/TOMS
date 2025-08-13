@@ -7,7 +7,7 @@ workloads=(0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9 )
 networkUp=100
 networkDown=100
 seed=0
-iterations=1
+iterations=3
 
 tmp_dir="./tmp"
 
@@ -27,7 +27,7 @@ echo "Workload Section Power Util CPU_Power Memory_Power Network_Power Offloadin
 for workload in "${workloads[@]}"; do
     echo "Running workload: $workload"
     # set utilCpu
-    utilCpu=$(echo "$workload - 0.1" | bc)
+    utilCpu=$(echo "$workload - 0.01" | bc)
 
     # Initializing variables for calculating averages
     declare -A sums
