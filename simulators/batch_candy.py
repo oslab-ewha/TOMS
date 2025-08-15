@@ -230,14 +230,14 @@ class ExperimentRunner:
             f.write(content)
     
     def run_experiment(self, server_power, network, workload):
-        """단일 실험 수행"""
         print(f"\n실험: Server={server_power}, Network={network}, Workload={workload:.1f}")
         
         # 매개변수 설정
         self.modify_server_power(server_power)
+        self.modify_network(network)     # 🔹 네트워크 설정 추가
         self.modify_workload(workload)
         
-        # run_candy.py 실행 (network, workload 매개변수 포함)
+        # run_candy.py 실행
         cmd = ['python', 'run_candy.py', str(network), str(workload)]
         result = subprocess.run(cmd, capture_output=True, text=True)
         
@@ -247,7 +247,7 @@ class ExperimentRunner:
         
         # 결과 파싱
         return self.parse_results(server_power, network, workload)
-    
+
     def parse_results(self, server_power, network, workload):
         """tmp/ 디렉토리에서 최신 결과 파싱"""
         tmp_dir = Path("tmp")
